@@ -42,6 +42,8 @@ async function worker(browser, times, label) {
   const all = stills
     ? stills.map((t, i) => [i, t])
     : Array.from({ length: Math.round(TL.duration * TL.fps) }, (_, i) => [i, i / TL.fps])
+        // FROM/TO (seconds) re-render only part of the film
+        .filter(([, t]) => t >= Number(process.env.FROM ?? 0) && t < Number(process.env.TO ?? Infinity))
   const chunks = Array.from({ length: Math.min(WORKERS, all.length) }, (_, w) => all.filter((_, i) => i % Math.min(WORKERS, all.length) === w))
   await Promise.all(chunks.map((c, w) => worker(browser, c, `w${w}`)))
   console.log(`rendered ${all.length} frames → ${OUT}`)

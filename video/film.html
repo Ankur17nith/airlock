@@ -315,7 +315,7 @@ function wall(T) {
   svg += box(8.6, 0, -0.35, 7, 7, .35, '#E3F2F0', '#BFDCD9', '#AACFCB', p(T, 38.9, .7))
   // the wall
   const wh = 3.2 * p(T, 38.8 + 1.5, .8)
-  svg += box(7.55, -0.4, 0, .5, 7.8, wh, '#3A3346', '#1D1726', '#2B2535', 1)
+  if (wh > .02) svg += box(7.55, -0.4, 0, .5, 7.8, wh, '#3A3346', '#1D1726', '#2B2535', 1)
   // cubes
   for (const c of CUBES) {
     const k = p(T, c.at - .2, .5)
