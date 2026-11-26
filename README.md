@@ -11,7 +11,7 @@
 <img src="https://img.shields.io/badge/%23BuildHybridAI-2026-1D1726" alt="#BuildHybridAI 2026">
 </p>
 
-**Live:** *coming Sat 29 Nov* · **Film (2:45):** *Sun 30 Nov* · **Architecture:** [docs/architecture.md](docs/architecture.md) · **Privacy model:** [docs/privacy.md](docs/privacy.md) · **Business case:** [docs/business-case.md](docs/business-case.md)
+**Live:** *coming Sat 29 Nov* · **Film (2:45):** draft cut ready, YouTube link on upload ([how it's made](video/README.md)) · **Deck:** [PDF](docs/deck/airlock-deck.pdf) · **Architecture:** [docs/architecture.md](docs/architecture.md) · **Privacy model:** [docs/privacy.md](docs/privacy.md) · **Business case:** [docs/business-case.md](docs/business-case.md)
 
 ---
 
@@ -32,6 +32,24 @@
 > 2. **With Gemini Nano:** Chrome 139+ → `chrome://flags/#prompt-api-for-gemini-nano-multimodal-input` → Enabled → relaunch. Open the app, press **Prepare on-device model**, then **Check a sample bill**. Watch the badge: **● ON DEVICE** for Read, **● IN CLOUD** for Audit.
 > 3. **Try to break it:** add `?guard-demo=1`. An ID is smuggled into a line description; the guard blocks the request and the boundary panel shows a red **BLOCKED** row.
 > 4. **Check it yourself:** DevTools → Network → the Gemini request. Search it for *Ellison*. It isn't there.
+
+<p align="center"><img src="video/out/poster.jpg" alt="Airlock film poster" width="720"></p>
+
+<table><tr>
+<td width="50%"><img src="docs/assets/screens/sealed.jpg" alt="Identity sealed on the device; the exact payload that will cross"></td>
+<td><img src="docs/assets/screens/blocked.jpg" alt="The guard blocks a request with a member ID smuggled into line 7"></td>
+</tr><tr>
+<td align="center"><sub>Sealed on the device: identity becomes tokens; the exact bytes that will cross are shown</sub></td>
+<td align="center"><sub>The guard refuses a request with a member ID hidden in a description</sub></td>
+</tr><tr>
+<td><img src="docs/assets/screens/findings.jpg" alt="Findings with cited rules"></td>
+<td><img src="docs/assets/screens/letter.jpg" alt="The letter, filled in on the device"></td>
+</tr><tr>
+<td align="center"><sub>Findings from the cloud audit, each with the rule it relies on</sub></td>
+<td align="center"><sub>The letter, drafted with placeholders, filled in locally</sub></td>
+</tr></table>
+
+<sub>Screens from sample-run mode (scripted model outputs, labelled in the app).</sub>
 
 ## How it uses Firebase
 
