@@ -100,7 +100,7 @@ button { font: inherit; color: inherit; }
 /* ── buttons (hex-style corner handles) ─────────── */
 .btn {
   --h: 6px;
-  position: relative; display: inline-flex; align-items: center; gap: 10px;
+  position: relative; display: inline-flex; align-items: center; gap: 10px; white-space: nowrap;
   padding: 13px 22px; border: 1px solid var(--rule); background: transparent; cursor: pointer;
   font: 500 14px/1 var(--sans); color: var(--ink); text-decoration: none;
   transition: background .2s var(--ease), border-color .2s var(--ease);

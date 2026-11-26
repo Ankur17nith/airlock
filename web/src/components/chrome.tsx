@@ -42,6 +42,36 @@ export function NanoBadge({ state }: { state: NanoState | 'checking' }) {
   return <span className={`badge ${cls}`} title="Chrome's built-in Gemini Nano (Prompt API)">{state === 'available' ? 'On device · ' : ''}{NANO_LABEL[state]}</span>
 }
 
+type Theme = 'auto' | 'light' | 'dark'
+function readTheme(): Theme {
+  try { const t = localStorage.getItem('airlock-theme'); return t === 'light' || t === 'dark' ? t : 'auto' } catch { return 'auto' }
+}
+function ThemeSwitch() {
+  const [theme, setTheme] = useState<Theme>(readTheme)
+  const choose = (t: Theme) => {
+    setTheme(t)
+    if (t === 'auto') delete document.documentElement.dataset.theme
+    else document.documentElement.dataset.theme = t
+    try { if (t === 'auto') localStorage.removeItem('airlock-theme'); else localStorage.setItem('airlock-theme', t) } catch { /* private mode */ }
+  }
+  const opts: [Theme, string, string][] = [
+    ['light', 'Light', 'M12 4V2M12 22v-2M4 12H2M22 12h-2M5.6 5.6 4.2 4.2M19.8 19.8l-1.4-1.4M5.6 18.4l-1.4 1.4M19.8 4.2l-1.4 1.4M12 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10z'],
+    ['auto', 'Match system', 'M12 21a9 9 0 1 0 0-18v18z'],
+    ['dark', 'Dark', 'M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z'],
+  ]
+  return (
+    <div className="theme-switch" role="radiogroup" aria-label="Colour theme">
+      {opts.map(([t, label, d]) => (
+        <button key={t} role="radio" aria-checked={theme === t} aria-label={label} title={label} className={theme === t ? 'on' : ''} onClick={() => choose(t)}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill={t === 'auto' ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            {t === 'auto' && <circle cx="12" cy="12" r="9" fill="none" />}<path d={d} />
+          </svg>
+        </button>
+      ))}
+    </div>
+  )
+}
+
 export function Header({ route }: { route: string }) {
   const [nano] = useNano()
   return (
@@ -58,6 +88,7 @@ export function Header({ route }: { route: string }) {
         <Wordmark />
         <nav className="nav-side nav-right" aria-label="Actions">
           <span className="hide-sm"><NanoBadge state={nano} /></span>
+          <ThemeSwitch />
           <a href="https://github.com/Ankur17nith/airlock" className="hide-sm">GitHub</a>
           {route !== 'app' && <a className="btn btn-primary btn-sm" href="#/app">Check a bill</a>}
         </nav>

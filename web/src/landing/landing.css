@@ -136,3 +136,9 @@ code { font-family: var(--mono); font-size: .88em; background: var(--paper-2); p
 .faq-wrap .sec-head { position: sticky; top: 24px; }
 .wall-ids .token { justify-self: start; }
 @media (max-width: 640px) { .h2 br { display: none; } }
+
+/* theme switch */
+.theme-switch { display: inline-flex; border: 1px solid var(--rule); border-radius: 999px; padding: 2px; background: var(--card); }
+.theme-switch button { width: 28px; height: 24px; display: grid; place-items: center; border: 0; background: none; border-radius: 999px; color: var(--ink-3); cursor: pointer; transition: background .2s var(--ease), color .2s var(--ease); }
+.theme-switch button:hover { color: var(--ink); }
+.theme-switch button.on { background: var(--coral-wash); color: var(--ink); }
