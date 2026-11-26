@@ -13,3 +13,4 @@ video/out/*.wav
 video/out/*.mp4
 docs/deck/slide-*.png
 __pycache__/
+!web/.env.production
