@@ -1,4 +1,9 @@
-<p align="center"><img src="brand/airlock-logo.svg" alt="Airlock" height="64"></p>
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="brand/airlock-logo-dark.png">
+    <img src="brand/airlock-logo.png" alt="Airlock" height="64">
+  </picture>
+</p>
 
 <h3 align="center">Fight the bill, not your privacy.</h3>
 
