@@ -38,6 +38,17 @@
 #numbers .v{font-family:"Archivo",sans-serif;font-variation-settings:"wdth" 125;font-weight:800;font-size:112px;line-height:1;letter-spacing:-.045em;color:#F5F3EF}
 #numbers p{font:400 22px/1.45 "IBM Plex Sans",sans-serif;margin:18px 0 12px;max-width:380px}
 #numbers .src{font:500 13px "IBM Plex Mono",monospace;letter-spacing:.08em;text-transform:uppercase;color:#7C7488}
+
+/* devpost thumbnail, 3:2 */
+#thumb{width:1500px;height:1000px;text-align:center}
+#thumb .mark{position:absolute;left:50%;top:120px;transform:translateX(-50%)}
+#thumb h1{position:absolute;left:0;right:0;top:290px;font-size:132px}
+#thumb h1 .accent{font-size:1.1em;display:block;margin-top:6px}
+#thumb .split{position:absolute;left:150px;right:150px;bottom:120px;display:grid;grid-template-columns:1fr 70px 1fr;align-items:stretch;height:150px}
+#thumb .side{border-radius:12px;display:flex;flex-direction:column;justify-content:center;gap:12px;border:1px solid var(--rule)}
+#thumb .side b{font:600 34px "IBM Plex Sans",sans-serif;color:var(--ink)}
+#thumb .dev{background:rgba(229,72,77,.08)}#thumb .cloud{background:rgba(33,145,140,.09)}
+#thumb .wall{margin:0 18px;border-left:2px dashed var(--ink-3);border-right:2px dashed var(--ink-3);background:repeating-linear-gradient(135deg,transparent 0 9px,rgba(29,23,38,.1) 9px 10px)}
 </style>
 </head>
 <body>
@@ -67,5 +78,15 @@
   </div>
 </div>
 
+
+<div id="thumb" class="art paper">
+  <svg class="mark" width="120" height="120" viewBox="0 0 120 120"><rect width="120" height="120" rx="26.4" fill="#1D1726"/><path d="M55.5 31.2A28.8 28.8 0 0 0 55.5 88.8Z" fill="#E5484D"/><path d="M64.5 34.8A25.2 25.2 0 0 1 64.5 85.2" fill="none" stroke="#F5F3EF" stroke-width="7.2" stroke-dasharray="8.4 5.4"/><rect x="55.5" y="20.4" width="9" height="79.2" rx="4.5" fill="#F5F3EF"/></svg>
+  <h1 class="display">Fight the bill,<span class="accent">not your privacy</span></h1>
+  <div class="split">
+    <div class="side dev"><span class="tag t-dev" style="align-self:center;font-size:20px">ONLY_ON_DEVICE</span><b>Gemini Nano seals who you are</b></div>
+    <div class="wall"></div>
+    <div class="side cloud"><span class="tag t-cloud" style="align-self:center;font-size:20px">ONLY_IN_CLOUD</span><b>Gemini audits the charges</b></div>
+  </div>
+</div>
 </body>
 </html>
