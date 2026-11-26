@@ -12,3 +12,4 @@ video/work/
 video/out/*.wav
 video/out/*.mp4
 docs/deck/slide-*.png
+__pycache__/
