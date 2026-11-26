@@ -1,0 +1,39 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Sample bill (fictional)</title>
+<style>
+body{margin:0;background:#fff;font:13px/1.4 "Helvetica Neue",Arial,sans-serif;color:#111}
+.page{width:850px;padding:44px 52px;box-sizing:border-box}
+.top{display:flex;justify-content:space-between;border-bottom:3px solid #1f4e79;padding-bottom:14px}
+.logo{font:700 22px Georgia,serif;color:#1f4e79}.logo small{display:block;font:12px Arial;color:#555}
+.meta td{padding:1px 0 1px 14px;text-align:right}.meta td:first-child{color:#555}
+h2{font-size:15px;margin:22px 0 8px;color:#1f4e79;text-transform:uppercase;letter-spacing:.04em}
+.two{display:flex;gap:40px}.box{flex:1;border:1px solid #bbb;padding:10px 12px}
+.box b{display:block;font-size:11px;color:#555;text-transform:uppercase;margin-bottom:4px}
+table.items{width:100%;border-collapse:collapse;margin-top:6px}
+.items th{background:#1f4e79;color:#fff;text-align:left;padding:6px;font-size:11px;text-transform:uppercase}
+.items td{padding:6px;border-bottom:1px solid #ddd}.items td.n{text-align:right;font-variant-numeric:tabular-nums}
+.items tr:nth-child(even) td{background:#f5f8fb}
+.tot{margin-left:auto;width:330px;margin-top:12px}.tot td{padding:4px 6px}.tot td.n{text-align:right}
+.due{font-size:17px;font-weight:700;border-top:2px solid #111}
+.foot{margin-top:26px;font-size:11px;color:#555;border-top:1px solid #ccc;padding-top:10px}
+.stamp{color:#b00;font-weight:700;font-size:11px;letter-spacing:.08em}
+</style></head><body><div class="page">
+<div class="top"><div class="logo">Riverbend General Hospital<small>1200 River Park Blvd · Columbus, OH · Patient Financial Services (614) 555-0100</small></div>
+<table class="meta"><tr><td>Statement date</td><td>11/02/2026</td></tr><tr><td>Account no.</td><td>400118273</td></tr><tr><td>Due by</td><td>12/02/2026</td></tr></table></div>
+<h2>Itemized statement</h2>
+<div class="two">
+<div class="box"><b>Patient / guarantor</b>Maya R. Ellison<br>2148 Oakridge Ave<br>Columbus, OH 43215<br>DOB 04/17/1991 · (614) 555-0142<br>maya.ellison@example.com</div>
+<div class="box"><b>Insurance</b>BlueCrest PPO<br>Member ID XGH884120937<br>Group 0072215<br><b style="margin-top:8px">Visit</b>Emergency Department · 10/03/2026<br>Dx: S63.501A Sprain of right wrist</div>
+</div>
+<table class="items"><tr><th>Line</th><th>Date</th><th>Code</th><th>Description</th><th>Qty</th><th style="text-align:right">Charge</th></tr>
+<tr><td>1</td><td>10/03/26</td><td>99285</td><td>ED visit, high complexity (level 5)</td><td>1</td><td class="n">1,890.00</td></tr>
+<tr><td>2</td><td>10/03/26</td><td>73110</td><td>X-ray wrist, 3+ views</td><td>1</td><td class="n">212.00</td></tr>
+<tr><td>3</td><td>10/03/26</td><td>73110</td><td>X-ray wrist, 3+ views</td><td>1</td><td class="n">212.00</td></tr>
+<tr><td>4</td><td>10/03/26</td><td>29125</td><td>Application of short arm splint, static</td><td>1</td><td class="n">384.00</td></tr>
+<tr><td>5</td><td>10/03/26</td><td>A4570</td><td>Splint supply</td><td>1</td><td class="n">96.00</td></tr>
+<tr><td>6</td><td>10/03/26</td><td>J1885</td><td>Injection, ketorolac, 15 mg</td><td>1</td><td class="n">58.00</td></tr>
+<tr><td>7</td><td>10/03/26</td><td>96372</td><td>Therapeutic injection, IM</td><td>1</td><td class="n">145.00</td></tr>
+<tr><td>8</td><td>10/03/26</td><td>0450</td><td>Emergency room, general</td><td>1</td><td class="n">640.00</td></tr>
+<tr><td>9</td><td>10/04/26</td><td>36415</td><td>Routine venipuncture</td><td>1</td><td class="n">48.00</td></tr></table>
+<table class="tot"><tr><td>Total charges</td><td class="n">3,685.00</td></tr><tr><td>Insurance payments</td><td class="n">−2,401.00</td></tr><tr class="due"><td class="due">Amount due</td><td class="n due">$1,284.00</td></tr></table>
+<div class="foot"><span class="stamp">SAMPLE · FICTIONAL PATIENT · NOT A REAL BILL</span><br>Questions about this statement? Call Patient Financial Services. Financial assistance may be available.</div>
+</div></body></html>
