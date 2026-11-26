@@ -54,7 +54,7 @@ guard(body: string, vault: Vault): { ok: boolean; leaks: Leak[] }
 ```
 
 - Runs on the exact serialised request body, after the SDK request is built and before it is sent. A custom `fetch` wrapper is the last stop, so nothing can bypass it.
-- Checks every vault value plus normalised variants: case-folded, whitespace and punctuation removed, digits only (IDs, phones, ZIPs), the last 4 and first 6 of long numbers, `Lastname, F.` / `F. Lastname` / initials, the date in ISO, US and long formats.
+- Checks every vault value plus normalised variants: case-folded, whitespace and punctuation removed, digits only (IDs, phones, ZIPs), the last 6 digits of IDs of 9+ digits, `Lastname, First` / `F. Lastname` / each name part as a whole word, a ZIP only next to its state (bare ZIPs collide with CPT codes), the date in ISO, US and long formats.
 - On any hit it throws `AirlockBreach`, writes a `blocked` ledger row with the variant matched (shown masked), and the UI shows the user the exact field.
 
 ## Client modules
