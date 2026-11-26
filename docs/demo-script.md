@@ -1,8 +1,10 @@
 # Demo film script: *Airlock* (target 2:45, hard cap 3:00)
 
 **Voices (ElevenLabs).**
-- **MAYA:** American English, warm, mid-30s, conversational. Carries the patient's story.
-- **ARJUN:** Indian English, clear, calm, builder. Carries how it works.
+- **MAYA:** American English, warm, mid-30s, conversational. Carries the patient's story. *(ElevenLabs premade "Sarah", `eleven_multilingual_v2`.)*
+- **ARJUN:** Indian English, clear, calm, builder. Carries how it works. *(ElevenLabs premade "Eric", `eleven_v3` with an `[Indian English accent]` tag. The free tier blocks library voices such as "Ranbir" over the API; an upgrade would allow a native Indian-English voice.)*
+
+The recorded lines live in `video/lines.json`; this table is the plan they came from.
 
 The alternation is deliberate: the problem is told by the person who has it, the solution by the person who built it.
 
@@ -23,7 +25,7 @@ The alternation is deliberate: the problem is told by the person who has it, the
 | 5 | 0:39–1:01 | Isometric diagram: left block **YOUR LAPTOP** (coral), a wall, right block **CLOUD** (teal). Cubes for *Gemini Nano*, *Vault*, *Guard*, *Gemini*, *Firestore*, *Remote Config*. Line items travel across the wall; a coral cube stays behind | **ARJUN:** "Airlock splits the work across a wall. On your laptop, Gemini Nano reads the bill — in *only-on-device* mode, so it can never quietly fall back to the cloud. Your identity goes into a vault. Only anonymous line items cross, and cloud Gemini audits them against real billing rules, grounded in Google Search." | `ONLY_ON_DEVICE` · `ONLY_IN_CLOUD` · *one Firebase AI Logic SDK* |
 | 6 | 1:01–1:24 | **Screen:** landing → *Check a bill* → drop `bill.jpg`. The Read step runs; badge **● ON DEVICE · Gemini Nano**. The Seal animation: *Maya R. Ellison* strikes through and collapses into `⟦PATIENT_NAME⟧`, then member ID, DOB, hospital name | **ARJUN:** "Watch. Nano reads the photo, right here. Name, member ID, birthday, the hospital — each one becomes a token. The real values stay in an encrypted vault on this laptop." | `Read · on device` → `Sealed: 6 identifiers` |
 | 7 | 1:24–1:38 | **Screen:** the Crossing review. The boundary panel shows the outgoing JSON. Then the guard demo: a description containing `MBR 88412-0937` is caught; a red **BLOCKED** row appears | **ARJUN:** "Before a single byte leaves, a guard — written in code, not in a prompt — checks it. Hide an ID in a description, and the request is blocked." | `BLOCKED · member ID in line 7` |
-| 8 | 1:38–2:00 | **Screen:** Audit runs; badge **● IN CLOUD · Gemini**. Findings appear with amber borders: *Duplicate charge, CT 73110 X-ray, $212.00*; *Level-5 ER visit (99285) for a 40-minute visit: ask for the documentation*. Each shows its cited rule | **MAYA:** "It found the X-ray, billed twice: two hundred and twelve dollars. And it questioned a level-five ER code for a forty-minute visit — and told me which rule it's relying on." | `$212.00` counts up |
+| 8 | 1:38–2:00 | **Screen:** Audit runs; badge **● IN CLOUD · Gemini**. Findings appear with amber borders: *Duplicate charge, CT 73110 X-ray, $212.00*; *Level 5 ER visit for a wrist sprain: ask for the documentation*. Each shows its cited rule | **MAYA:** "It found the X-ray, billed twice: two hundred and twelve dollars. And it questioned a level-five ER code for a sprained wrist — and told me which rule it's relying on." | `$212.00` counts up |
 | 9 | 2:00–2:15 | **Screen:** the letter. Tokens flip, left to right, into real values: `⟦PATIENT_NAME⟧` → *Maya R. Ellison* | **ARJUN:** "The cloud drafts the dispute letter with placeholders. Back on the device, Airlock fills in the real details. The finished letter never leaves your laptop." | `Rehydrated on device` |
 | 10 | 2:15–2:29 | **Screen:** macOS airplane mode on (Wi-Fi icon off). Tap *Explain this finding*; the badge says **● ON DEVICE**; a plain-English paragraph streams in | **ARJUN:** "Turn the internet off, and the private half still works. Explanations run on-device when they can, in the cloud when they can't — because they carry no identity." | `offline · on device` |
 | 11 | 2:29–2:38 | Paper strip of six Firebase product cards drawing in: AI Logic (hybrid) · App Check · Auth · Remote Config · Firestore · Hosting | **ARJUN:** "One SDK. Three inference modes, each chosen on purpose." | product names |
