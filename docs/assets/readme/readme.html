@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Airlock README art</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,500..800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&family=Instrument+Serif:ital@1&display=block" rel="stylesheet">
+<style>
+:root{--paper:#F5F3EF;--card:#FBFAF8;--grid:#E9E4DC;--rule:#D9D2C7;--ink:#1D1726;--ink-2:#43394C;--ink-3:#71697A;--ink-4:#9A93A2;--coral:#E5484D;--coral-wash:#FBE5E4;--teal:#21918C;--teal-wash:#DDF0EE}
+*{box-sizing:border-box}body{margin:0;background:#888}
+.art{position:relative;overflow:hidden;font-family:"IBM Plex Sans",sans-serif}
+.paper{background-color:var(--paper);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px}
+.display{font-family:"Archivo",sans-serif;font-variation-settings:"wdth" 125;font-weight:800;letter-spacing:-.035em;line-height:.98;color:var(--ink);margin:0}
+.accent{font-family:"Instrument Serif",serif;font-style:italic;font-weight:400;letter-spacing:-.015em}
+.mono{font-family:"IBM Plex Mono",monospace}
+.eyebrow{font:500 14px/1 "IBM Plex Mono",monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+
+/* hero */
+#hero{width:1600px;height:720px;text-align:center;border:1px solid var(--rule)}
+#hero .frame{position:absolute;top:0;bottom:0;left:120px;right:120px;border-left:1px solid var(--rule);border-right:1px solid var(--rule)}
+#hero .bar{position:absolute;left:0;right:0;top:0;height:44px;border-bottom:1px solid var(--rule);background:#EFECE6;display:flex;align-items:center;justify-content:center;font:500 14px "IBM Plex Mono",monospace;color:var(--ink-2);letter-spacing:.03em}
+#hero .mark{position:absolute;left:50%;top:92px;transform:translateX(-50%)}
+#hero h1{position:absolute;left:0;right:0;top:206px;font-size:112px}
+#hero h1 .accent{font-size:1.1em;display:block;margin-top:4px}
+#hero .spark{position:absolute;left:1236px;top:184px}
+#hero .chips{position:absolute;left:0;right:0;top:494px;font:300 30px/1 "IBM Plex Sans",sans-serif;color:var(--ink-2);display:flex;justify-content:center;align-items:center;gap:12px}
+.chip{display:inline-flex;align-items:center;gap:10px;padding:5px 18px 5px 6px;border:1px solid var(--rule);border-radius:999px;background:var(--card);color:var(--ink-2)}
+.chip i{width:38px;height:38px;border-radius:999px;border:1px solid var(--rule);background:var(--paper);display:grid;place-items:center;font-style:normal}
+#hero .modes{position:absolute;left:0;right:0;bottom:62px;display:flex;justify-content:center;gap:16px}
+.tag{display:inline-flex;align-items:center;gap:9px;font:500 15px/1 "IBM Plex Mono",monospace;letter-spacing:.05em;padding:9px 13px;border-radius:5px}
+.tag::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor}
+.t-dev{background:var(--coral-wash);color:var(--coral)}.t-cloud{background:var(--teal-wash);color:var(--teal)}.t-hyb{background:#ECE8F8;color:#5B3FD0}
+
+/* numbers */
+#numbers{width:1600px;height:440px;background:#14141C;color:#CFC8D8;padding:60px 120px}
+#numbers .eyebrow{color:#9A93A2}
+#numbers .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:56px;margin-top:40px}
+#numbers .v{font-family:"Archivo",sans-serif;font-variation-settings:"wdth" 125;font-weight:800;font-size:112px;line-height:1;letter-spacing:-.045em;color:#F5F3EF}
+#numbers p{font:400 22px/1.45 "IBM Plex Sans",sans-serif;margin:18px 0 12px;max-width:380px}
+#numbers .src{font:500 13px "IBM Plex Mono",monospace;letter-spacing:.08em;text-transform:uppercase;color:#7C7488}
+</style>
+</head>
+<body>
+
+<div id="hero" class="art paper">
+  <div class="frame"></div>
+  <div class="bar">↗&nbsp; Built for #BuildHybridAI 2026 — one Firebase AI Logic SDK, Gemini Nano on your device, Gemini in the cloud</div>
+  <svg class="mark" width="84" height="84" viewBox="0 0 120 120"><rect width="120" height="120" rx="26.4" fill="#1D1726"/><path d="M55.5 31.2A28.8 28.8 0 0 0 55.5 88.8Z" fill="#E5484D"/><path d="M64.5 34.8A25.2 25.2 0 0 1 64.5 85.2" fill="none" stroke="#F5F3EF" stroke-width="7.2" stroke-dasharray="8.4 5.4"/><rect x="55.5" y="20.4" width="9" height="79.2" rx="4.5" fill="#F5F3EF"/></svg>
+  <h1 class="display">Fight the bill,<span class="accent">not your privacy</span></h1>
+  <svg class="spark" width="64" height="64" viewBox="0 0 54 54">
+    <g stroke="#E5484D" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="3 3"><line x1="27" y1="4" x2="27" y2="16"/><line x1="8" y1="12" x2="16" y2="19"/><line x1="46" y1="12" x2="38" y2="19"/><line x1="4" y1="30" x2="15" y2="30"/><line x1="50" y1="30" x2="39" y2="30"/><line x1="44" y1="46" x2="37" y2="39"/></g>
+  </svg>
+  <div class="chips">
+    <span class="chip"><i><svg width="17" height="17" viewBox="0 0 16 16" fill="none" stroke="#E5484D" stroke-width="1.4"><rect x="3" y="1.5" width="10" height="13" rx="1.5"/><path d="M5.5 5h5M5.5 8h5M5.5 11h3"/></svg></i>Read</span> your bill on your device,
+    <span class="chip"><i><svg width="13" height="14" viewBox="0 0 10 11"><rect x="1" y="4.5" width="8" height="6" rx="1.2" fill="#E5484D"/><path d="M3 4.5V3a2 2 0 0 1 4 0v1.5" stroke="#E5484D" stroke-width="1.3" fill="none"/></svg></i>seal</span> who you are,
+    <span class="chip"><i><svg width="17" height="17" viewBox="0 0 16 16" fill="none" stroke="#21918C" stroke-width="1.5"><circle cx="7" cy="7" r="4.5"/><path d="m10.5 10.5 3.5 3.5"/></svg></i>audit</span> the charges in the cloud.
+  </div>
+  <div class="modes"><span class="tag t-dev">ONLY_ON_DEVICE</span><span class="tag t-cloud">ONLY_IN_CLOUD</span><span class="tag t-hyb">PREFER_ON_DEVICE</span></div>
+</div>
+
+<div id="numbers" class="art">
+  <div class="eyebrow">┤ Why it matters ├</div>
+  <div class="grid">
+    <div><div class="v" style="color:#F26B6F">43%</div><p>of US adults have had a medical bill they believed was wrong</p><div class="src">KFF Health Care Debt Survey</div></div>
+    <div><div class="v">&lt; ½</div><p>of insured adults with a surprise bill ever challenge it</p><div class="src">Commonwealth Fund, 2024</div></div>
+    <div><div class="v" style="color:#3DB5AF">38%</div><p>of people who dispute get it reduced or cancelled</p><div class="src">Commonwealth Fund, 2024</div></div>
+  </div>
+</div>
+
+</body>
+</html>
