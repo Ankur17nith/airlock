@@ -1,0 +1,62 @@
+# Test, build and deploy Airlock to Firebase (project airlock-hybrid-918b1) on every push to main.
+#
+# Needs one repository secret, FIREBASE_SERVICE_ACCOUNT: the JSON key of a service account with the
+# roles Firebase Admin, Service Usage Consumer and API Keys Viewer. Setup: docs/human-runbook.md §5b.
+# Deploys only if the tests pass; a failing test stops the deploy.
+name: deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: # "Run workflow" button in the Actions tab
+
+concurrency:
+  group: deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - name: Install
+        working-directory: web
+        run: npm ci
+
+      - name: Typecheck, lint and test
+        working-directory: web
+        run: npm run check
+
+      - name: Build
+        working-directory: web
+        run: npm run build
+
+      - name: Deploy hosting, Firestore rules and Remote Config
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        run: |
+          if [ -z "$FIREBASE_SERVICE_ACCOUNT" ]; then
+            echo "::error::Add the FIREBASE_SERVICE_ACCOUNT repository secret (docs/human-runbook.md §5b)"
+            exit 1
+          fi
+          printf '%s' "$FIREBASE_SERVICE_ACCOUNT" > "$RUNNER_TEMP/sa.json"
+          export GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/sa.json"
+          npx -y firebase-tools@latest deploy \
+            --only hosting,firestore:rules,remoteconfig \
+            --project airlock-hybrid-918b1 --non-interactive --force
+          rm -f "$RUNNER_TEMP/sa.json"
+
+      - name: Smoke-test the live site
+        run: |
+          code=$(curl -s -o /dev/null -w '%{http_code}' https://airlock-hybrid-918b1.web.app/)
+          echo "live site: HTTP $code"
+          test "$code" = 200

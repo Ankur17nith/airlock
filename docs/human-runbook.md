@@ -45,6 +45,22 @@ cd web && npm ci && npm run check && npm run deploy
 
 You should get `Hosting URL: https://<project>.web.app`. Open it in Chrome with Nano, then in Safari/Firefox (manual airlock path) and with `?replay=1`.
 
+## 5b. Automatic deploys (once, ≈5 min)
+
+`.github/workflows/deploy.yml` runs on every push to `main`: install → typecheck, lint, tests → build → deploy Hosting, Firestore rules and Remote Config → check the live URL returns 200. A failing test stops the deploy. It needs one secret:
+
+1. Open <https://console.cloud.google.com/iam-admin/serviceaccounts?project=airlock-hybrid-918b1> → **+ Create service account**.
+   - Name: `github-deploy` → **Create and continue**.
+   - Roles: **Firebase Admin**, **Service Usage Consumer**, **API Keys Viewer** → **Continue** → **Done**.
+2. Click `github-deploy` → **Keys** → **Add key → Create new key → JSON → Create**. A `.json` file downloads.
+3. GitHub → `Ankur17nith/airlock` → **Settings → Secrets and variables → Actions → New repository secret**.
+   - Name: `FIREBASE_SERVICE_ACCOUNT`
+   - Secret: open the downloaded file in a text editor and paste its **entire** contents → **Add secret**.
+4. Delete the downloaded `.json` file. Never commit it or paste it anywhere else.
+5. GitHub → **Actions → deploy → Run workflow** to deploy now. After that, every push deploys by itself.
+
+If a run fails at "Deploy" with a permission error, the message names the missing role: add it to `github-deploy` in IAM and re-run.
+
 ## 6. Record (Sunday)
 
 Follow `docs/demo-script.md` scene by scene. Before recording:
