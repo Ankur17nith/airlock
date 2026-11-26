@@ -103,7 +103,7 @@ export interface Leak {
 export interface LedgerEntry {
   id: number
   at: number
-  stage: 'read' | 'seal' | 'audit' | 'explain' | 'outcome' | 'other'
+  stage: 'read' | 'seal' | 'audit' | 'explain' | 'write' | 'outcome' | 'other'
   direction: 'local' | 'out' | 'in'
   source: Source
   bytes: number
