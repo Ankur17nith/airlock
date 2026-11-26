@@ -31,6 +31,8 @@
 | **The letter is filled back in** with your real details, locally | | |
 | **Explanations** run `PREFER_ON_DEVICE`: offline when they can be | | |
 
+<p align="center"><img src="docs/assets/pipeline/pipeline.png" alt="Airlock pipeline: what stays on the device and what crosses the wall" width="900"></p>
+
 > ### Judge this in 90 seconds
 >
 > 1. **No setup:** open the live URL with `?replay=1`. A recorded real run on a fictional bill plays through every stage, labelled *replay*.

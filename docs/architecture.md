@@ -4,33 +4,9 @@ Airlock is a static web app (Vite + React + TypeScript) on Firebase Hosting. The
 
 ## The pipeline
 
-```mermaid
-flowchart LR
-  subgraph DEVICE["YOUR DEVICE"]
-    IMG["bill.jpg / .png"] --> READ["1 · READ<br/>Gemini Nano<br/>ONLY_ON_DEVICE"]
-    READ --> ID["identity"]
-    READ --> LINES["line items"]
-    ID --> VAULT[("Vault<br/>IndexedDB · AES-GCM")]
-    LINES --> SEAL["2 · SEAL<br/>tokenise + regex sweep"]
-    VAULT -. "tokens" .-> SEAL
-    SEAL --> GUARD{{"AIRLOCK GUARD<br/>deterministic"}}
-    LETTER_T --> WRITE["4 · WRITE<br/>rehydrate, no model"]
-    VAULT -. "values" .-> WRITE
-    WRITE --> PDF["letter.pdf"]
-    FIND --> EXPLAIN["5 · EXPLAIN<br/>PREFER_ON_DEVICE"]
-  end
-  subgraph CLOUD["CLOUD"]
-    AUDIT["3 · AUDIT<br/>Gemini · ONLY_IN_CLOUD<br/>+ Google Search grounding"]
-    FS[("Firestore<br/>outcome counters")]
-    RC[("Remote Config<br/>policy")]
-  end
-  GUARD -- "pass: anonymous lines" --> AUDIT
-  GUARD -- "fail: blocked, shown to user" --> X["refused"]
-  AUDIT --> FIND["findings"]
-  AUDIT --> LETTER_T["letter with ⟦TOKENS⟧"]
-  PDF -. "outcome: won / lost, no PII" .-> FS
-  RC -. policy .-> SEAL
-```
+![Airlock pipeline: what stays on the device and what crosses the wall](assets/pipeline/pipeline.png)
+
+<sub>Source: [`assets/pipeline/pipeline.html`](assets/pipeline/pipeline.html); re-export with `node docs/assets/pipeline/build.js`.</sub>
 
 ## Inference modes, by stage
 

@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Airlock pipeline</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,500..800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Instrument+Serif:ital@1&display=block" rel="stylesheet">
+<style>
+:root{--paper:#F5F3EF;--card:#FBFAF8;--grid:#E9E4DC;--rule:#D9D2C7;--ink:#1D1726;--ink-2:#43394C;--ink-3:#71697A;--ink-4:#9A93A2;
+--coral:#E5484D;--coral-wash:#FBE5E4;--teal:#21918C;--teal-wash:#DDF0EE;--violet:#5B3FD0;--violet-wash:#ECE8F8}
+*{box-sizing:border-box}
+html,body{margin:0}
+#d{position:relative;width:1600px;height:960px;overflow:hidden;font-family:"IBM Plex Sans",sans-serif;color:var(--ink-2);
+  background-color:var(--paper);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px}
+.abs{position:absolute}
+.mono{font-family:"IBM Plex Mono",monospace}
+.eyebrow{font:500 13px/1 "IBM Plex Mono",monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+h1{font-family:"Archivo",sans-serif;font-variation-settings:"wdth" 125;font-weight:800;font-size:44px;letter-spacing:-.035em;line-height:1;color:var(--ink);margin:12px 0 0}
+h1 em{font-family:"Instrument Serif",serif;font-style:italic;font-weight:400;font-size:1.08em;letter-spacing:-.01em}
+
+.zone{position:absolute;top:170px;bottom:96px;border:1px solid var(--rule);border-radius:10px}
+.zone-dev{left:40px;width:690px;background:rgba(229,72,77,.045)}
+.zone-cloud{left:890px;width:670px;background:rgba(33,145,140,.05)}
+.zone-label{position:absolute;top:-11px;left:22px;padding:2px 10px;background:var(--paper);font:500 13px "IBM Plex Mono",monospace;letter-spacing:.12em}
+.zone-dev .zone-label{color:var(--coral)}.zone-cloud .zone-label{color:var(--teal)}
+
+.wall{position:absolute;left:756px;width:108px;top:150px;bottom:76px;border-left:1.5px dashed var(--ink-3);border-right:1.5px dashed var(--ink-3);
+  background:repeating-linear-gradient(135deg,transparent 0 9px,rgba(29,23,38,.07) 9px 10px)}
+.wall-label{position:absolute;top:-22px;left:50%;transform:translateX(-50%);font:500 12px "IBM Plex Mono",monospace;letter-spacing:.14em;color:var(--ink-3);white-space:nowrap}
+
+.box{position:absolute;background:var(--card);border:1px solid var(--rule);border-radius:7px;padding:16px 18px;box-shadow:0 1px 0 #fff inset,0 14px 30px -22px rgba(29,23,38,.35)}
+.box .n{font:500 12px "IBM Plex Mono",monospace;color:var(--ink-4);letter-spacing:.06em}
+.box b{display:block;font:600 19px/1.2 "IBM Plex Sans",sans-serif;color:var(--ink);margin-top:6px}
+.box p{margin:5px 0 0;font:400 14px/1.4 "IBM Plex Sans",sans-serif;color:var(--ink-3)}
+.box .top{display:flex;justify-content:space-between;align-items:center;gap:10px}.box .top .n{white-space:nowrap}
+.tag{display:inline-flex;align-items:center;gap:6px;font:500 11px/1 "IBM Plex Mono",monospace;letter-spacing:.05em;padding:5px 8px;border-radius:4px;white-space:nowrap}
+.tag::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.t-dev{background:var(--coral-wash);color:var(--coral)}.t-cloud{background:var(--teal-wash);color:var(--teal)}.t-hyb{background:var(--violet-wash);color:var(--violet)}.t-code{background:#ECE9E3;color:var(--ink-3)}
+.edge-dev{border-top:3px solid var(--coral)}.edge-cloud{border-top:3px solid var(--teal)}.edge-ink{border-top:3px solid var(--ink)}.edge-hyb{border-top:3px solid var(--violet)}
+.chip{position:absolute;background:var(--card);border:1px solid var(--rule);border-radius:999px;padding:7px 14px;font:500 13px "IBM Plex Mono",monospace;color:var(--ink-2);white-space:nowrap}
+.tok{font:500 13px "IBM Plex Mono",monospace;color:var(--coral);background:var(--coral-wash);padding:1px 6px;border-radius:3px}
+
+svg{position:absolute;left:0;top:0;overflow:visible;pointer-events:none}
+.lbl{position:absolute;font:500 12px "IBM Plex Mono",monospace;letter-spacing:.03em;color:var(--ink-3);background:var(--paper);padding:2px 7px;border-radius:3px;white-space:nowrap}
+.lbl.teal{color:var(--teal)}.lbl.coral{color:var(--coral)}
+
+.legend{position:absolute;left:40px;bottom:30px;display:flex;gap:28px;font:500 12px "IBM Plex Mono",monospace;color:var(--ink-3);letter-spacing:.04em}
+.legend span{display:inline-flex;align-items:center;gap:8px}
+.legend i{display:inline-block;width:22px;height:0;border-top:2px solid}
+.sig{position:absolute;right:40px;bottom:28px;display:flex;align-items:center;gap:10px;font:800 15px "Archivo",sans-serif;font-variation-settings:"wdth" 125;color:var(--ink);letter-spacing:.01em}
+</style>
+</head>
+<body>
+<div id="d">
+  <div class="abs" style="left:40px;top:40px">
+    <div class="eyebrow">┤ The pipeline ├</div>
+    <h1>What stays, <em>and what crosses.</em></h1>
+  </div>
+
+  <div class="zone zone-dev"><div class="zone-label">YOUR LAPTOP · CHROME</div></div>
+  <div class="zone zone-cloud"><div class="zone-label">CLOUD · FIREBASE</div></div>
+  <div class="wall"><div class="wall-label">┤ THE WALL ├</div></div>
+
+  <!-- device -->
+  <div class="box" style="left:70px;top:212px;width:170px;padding:14px 16px">
+    <div class="n">INPUT</div><b>bill.jpg</b><p>photo or screenshot</p>
+  </div>
+  <div class="box edge-dev" style="left:300px;top:200px;width:400px">
+    <div class="top"><span class="n">01 · READ</span><span class="tag t-dev">ONLY_ON_DEVICE</span></div>
+    <b>Gemini Nano reads the bill</b>
+    <p>Image → JSON under a schema. No Nano, no read: it never falls back to the cloud.</p>
+  </div>
+
+  <div class="box edge-dev" style="left:70px;top:420px;width:300px">
+    <div class="top"><span class="n">VAULT</span><span class="tag t-dev">stays here</span></div>
+    <b>Identity → tokens</b>
+    <p>Name, DOB, member ID, address, provider, diagnosis. AES-GCM in IndexedDB, 24 h.</p>
+  </div>
+  <div class="box edge-ink" style="left:430px;top:420px;width:270px">
+    <div class="top"><span class="n">02 · SEAL</span><span class="tag t-code">code</span></div>
+    <b>Only what an audit needs</b>
+    <p>Codes, units, amounts. Dates become <span class="mono">day 0</span>, <span class="mono">day 1</span>.</p>
+  </div>
+
+  <div class="box edge-ink" style="left:70px;top:660px;width:300px">
+    <div class="top"><span class="n">04 · WRITE</span><span class="tag t-code">code</span></div>
+    <b>Tokens filled back in</b>
+    <p><span class="tok">⟦PATIENT_NAME⟧</span> → your name, on this laptop only.</p>
+  </div>
+  <div class="box edge-hyb" style="left:430px;top:660px;width:290px;padding:16px 14px">
+    <div class="top"><span class="n">05 · EXPLAIN</span><span class="tag t-hyb">PREFER_ON_DEVICE</span></div>
+    <b>Plain words, offline</b>
+    <p>No identity in the input, so a cloud fallback is safe.</p>
+  </div>
+
+  <!-- wall: guard -->
+  <div class="box" style="left:742px;top:410px;width:136px;padding:14px 12px;text-align:center;border:1.5px solid var(--ink)">
+    <div class="n">GUARD</div>
+    <b style="font-size:17px">Leak check</b>
+    <p style="font-size:12.5px">code, not a prompt<br><span class="mono" style="font-size:11.5px">wraps fetch()</span></p>
+  </div>
+
+  <!-- cloud -->
+  <div class="box edge-cloud" style="left:960px;top:400px;width:400px">
+    <div class="top"><span class="n">03 · AUDIT</span><span class="tag t-cloud">ONLY_IN_CLOUD</span></div>
+    <b>Gemini checks the charges</b>
+    <p>Duplicates, unbundling, upcoding, surprise billing. Every finding cites its rule.</p>
+  </div>
+  <div class="chip" style="left:1390px;top:440px">Google Search</div>
+  <div class="chip" style="left:960px;top:236px">App Check</div>
+  <div class="chip" style="left:1088px;top:236px">Auth · anonymous</div>
+  <div class="box" style="left:960px;top:690px;width:250px;padding:14px 16px">
+    <div class="n">REMOTE CONFIG</div><b style="font-size:17px">Model + privacy policy</b>
+  </div>
+  <div class="box" style="left:1240px;top:690px;width:290px;padding:14px 16px">
+    <div class="n">FIRESTORE</div><b style="font-size:17px">Won / lost counters</b><p>no names, no amounts, no text</p>
+  </div>
+
+  <svg width="1600" height="960">
+    <defs>
+      <marker id="a-ink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#43394C"/></marker>
+      <marker id="a-teal" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#21918C"/></marker>
+      <marker id="a-coral" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#E5484D"/></marker>
+    </defs>
+    <g fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <!-- bill → read -->
+      <path d="M241 258 H298" stroke="#43394C" marker-end="url(#a-ink)"/>
+      <!-- read → vault (identity) -->
+      <path d="M380 318 V365 Q380 375 370 375 H230 Q220 375 220 385 V418" stroke="#E5484D" marker-end="url(#a-coral)"/>
+      <!-- read → seal (line items) -->
+      <path d="M560 318 V418" stroke="#43394C" marker-end="url(#a-ink)"/>
+      <!-- vault ⇢ seal: tokens -->
+      <path d="M372 480 H428" stroke="#E5484D" stroke-dasharray="4 4" marker-end="url(#a-coral)"/>
+      <!-- seal → guard -->
+      <path d="M701 480 H740" stroke="#43394C" marker-end="url(#a-ink)"/>
+      <!-- guard → audit (passes) -->
+      <path d="M879 465 H958" stroke="#21918C" stroke-width="2.2" marker-end="url(#a-teal)"/>
+      <!-- guard ✕ blocked -->
+      <path d="M810 409 V330" stroke="#E5484D" stroke-dasharray="3 4"/>
+      <!-- audit → search -->
+      <path d="M1361 462 H1388" stroke="#21918C" stroke-dasharray="3 3"/>
+      <!-- audit → write: letter with tokens (crosses back) -->
+      <path d="M1060 523 V575 Q1060 585 1050 585 H230 Q220 585 220 595 V658" stroke="#21918C" marker-end="url(#a-teal)"/>
+      <!-- audit → explain: findings -->
+      <path d="M1180 523 V600 Q1180 610 1170 610 H585 Q575 610 575 620 V658" stroke="#21918C" marker-end="url(#a-teal)"/>
+      <!-- vault ⇢ write: real values -->
+      <path d="M100 572 V658" stroke="#E5484D" stroke-dasharray="4 4" marker-end="url(#a-coral)"/>
+      <!-- write → letter, outcome to firestore -->
+      <path d="M220 784 V830 Q220 840 230 840 H1375 Q1385 840 1385 830 V790" stroke="#9A93A2" stroke-dasharray="2 5" marker-end="url(#a-ink)"/>
+    </g>
+    <!-- blocked mark -->
+    <g transform="translate(810 318)"><circle r="13" fill="#FBE5E4" stroke="#E5484D" stroke-width="1.5"/><path d="M-5 -5L5 5M5 -5L-5 5" stroke="#E5484D" stroke-width="2" stroke-linecap="round"/></g>
+  </svg>
+
+  <!-- edge labels -->
+  <div class="lbl coral" style="left:246px;top:363px">identity</div>
+  <div class="lbl" style="left:570px;top:356px">line items</div>
+  <div class="lbl coral" style="left:378px;top:452px">tokens</div>
+  <div class="lbl teal" style="left:884px;top:440px">anonymous</div>
+  <div class="lbl coral" style="left:770px;top:283px">blocked if a leak</div>
+  <div class="lbl teal" style="left:700px;top:574px">letter with ⟦TOKENS⟧</div>
+  <div class="lbl teal" style="left:930px;top:599px">findings</div>
+  <div class="lbl coral" style="left:108px;top:600px">values</div>
+  <div class="lbl" style="left:700px;top:829px">optional: won / lost, anonymous</div>
+
+  <div class="legend">
+    <span><i style="border-color:#E5484D"></i>stays on the device</span>
+    <span><i style="border-color:#21918C"></i>crosses the wall</span>
+    <span><i style="border-color:#43394C"></i>plain code, no model</span>
+  </div>
+  <div class="sig"><svg width="22" height="22" viewBox="0 0 120 120" style="position:static"><rect width="120" height="120" rx="26" fill="#1D1726"/><path d="M55.5 31.2A28.8 28.8 0 0 0 55.5 88.8Z" fill="#E5484D"/><path d="M64.5 34.8A25.2 25.2 0 0 1 64.5 85.2" fill="none" stroke="#F5F3EF" stroke-width="7.2" stroke-dasharray="8.4 5.4"/><rect x="55.5" y="20.4" width="9" height="79.2" rx="4.5" fill="#F5F3EF"/></svg>AIRLOCK</div>
+</div>
+</body>
+</html>
