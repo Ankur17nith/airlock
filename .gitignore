@@ -10,3 +10,4 @@ firebase-debug*.log
 coverage/
 video/work/
 video/out/*.wav
+video/out/*.mp4
