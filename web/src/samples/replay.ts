@@ -13,7 +13,7 @@ export const REPLAY = {
     findings: [
       {
         id: 'f1', kind: 'duplicate', title: 'Same wrist X-ray billed twice', lines: [2, 3], amount: 212,
-        rationale: 'Lines 2 and 3 bill CPT 73110 (wrist X-ray, 3+ views) once each on the same day with no modifier such as -76 or -RT/-LT to show a repeat or a second wrist. CMS sets the medically unlikely edit for 73110 at 2 per day only for bilateral studies.',
+        rationale: 'Lines 2 and 3 bill CPT 73110 (wrist X-ray, 3+ views) on the same day with identical descriptions and no modifier (such as -76 for a repeat study, or -RT/-LT for each wrist) to explain a second study. Ask for the duplicate to be removed.',
         rule: { name: 'CMS NCCI medically unlikely edits (MUEs)', citation: 'CMS, NCCI MUE table, practitioner services', url: 'https://www.cms.gov/medicare/coding-billing/national-correct-coding-initiative-ncci-edits/medicare-ncci-medically-unlikely-edits' },
         confidence: 'high',
       },
