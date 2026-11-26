@@ -6,6 +6,8 @@
 import { boot } from '/src/ai/firebase.ts'
 import { installFetchGuard } from '/src/ai/fetchGuard.ts'
 import { audit, explain } from '/src/ai/stages.ts'
+import { firebase } from '/src/ai/firebase.ts'
+import { getGenerativeModel, InferenceMode } from 'firebase/ai'
 import { seal } from '/src/airlock/vault.ts'
 import { ER_WRIST } from '/src/samples/erWrist.ts'
 const o = document.getElementById('o')
@@ -13,8 +15,15 @@ try {
   const s = seal(ER_WRIST)
   installFetchGuard(() => s.vault.identity)
   await boot()
+  const q = new URLSearchParams(location.search)
+  if (q.get('model')) {  // ?model=…&grounding=0|1 : a minimal call, to probe quota per model
+    const m = getGenerativeModel(firebase().ai, { mode: InferenceMode.ONLY_IN_CLOUD, inCloudParams: { model: q.get('model'), tools: q.get('grounding') === '1' ? [{ googleSearch: {} }] : [] } })
+    const t = await m.generateContent('Reply with the single word ok.')
+    o.textContent = 'OK ' + q.get('model') + ' grounding=' + q.get('grounding') + ' → ' + t.response.text().trim()
+    throw null
+  }
   const r = await audit(s.sealed)
   const e = await explain(r.data.findings[0])
   o.textContent = 'OK ' + JSON.stringify({ source: r.source, ms: Math.round(r.ms), summary: r.data.summary, findings: r.data.findings.map(f => [f.kind, f.title, f.lines, f.amount, f.rule.name]), sources: r.data.sources.length, letterHasTokens: /⟦[A-Z_]+⟧/.test(r.data.letter), explainSource: e.source, explain: e.data.slice(0, 200) }, null, 1)
-} catch (err) { o.textContent = 'ERR ' + (err && err.message) }
+} catch (err) { if (err) o.textContent = 'ERR ' + (err.message || '').slice(0, 900) }
 </script></body></html>

@@ -117,33 +117,73 @@ export async function read(image: Blob): Promise<Staged<BillRead>> {
 }
 
 // ── 3 · Audit (ONLY_IN_CLOUD + Google Search grounding) ────────────────────
-export interface AuditExtras { searchEntryPoint?: string; queries?: string[] }
+export interface AuditExtras { searchEntryPoint?: string; queries?: string[]; grounded: boolean }
+
+/** Errors worth another try on a different plan: quota (429), overload (500/503). */
+export const isRetryable = (e: unknown) => /\b(429|500|503)\b|quota|RESOURCE_EXHAUSTED|high demand|UNAVAILABLE/i.test(e instanceof Error ? e.message : String(e))
+const isQuota = (e: unknown) => /\b429\b|quota|RESOURCE_EXHAUSTED/i.test(e instanceof Error ? e.message : String(e))
+
+/**
+ * The order in which the audit is attempted. Grounding is the better audit,
+ * but the Gemini free tier has no Google Search quota, and busy models
+ * return 500/503: fall back without grounding, then to a lighter model.
+ */
+export function auditPlan(primary: string, fallback: string, useGrounding: boolean): { model: string; grounded: boolean }[] {
+  const plan = useGrounding ? [{ model: primary, grounded: true }] : []
+  plan.push({ model: primary, grounded: false })
+  if (fallback && fallback !== primary) plan.push({ model: fallback, grounded: false })
+  return plan
+}
 
 export async function audit(bill: SealedBill): Promise<Staged<AuditResult> & AuditExtras> {
   const t0 = performance.now()
   setStage('audit')
-  const model = getGenerativeModel(firebase().ai, {
-    mode: InferenceMode.ONLY_IN_CLOUD,
-    inCloudParams: { model: policy().cloud_model, tools: [{ googleSearch: {} }], generationConfig: { temperature: 0.2 } },
-  })
-  const r = await model.generateContent(auditPrompt(bill))
+  const pol = policy()
+  const plan = auditPlan(pol.cloud_model, pol.cloud_model_fallback, pol.use_grounding)
+  let r: GenerateContentResult | undefined, grounded = false, last: unknown
+  for (const [i, step] of plan.entries()) {
+    try {
+      r = await getGenerativeModel(firebase().ai, {
+        mode: InferenceMode.ONLY_IN_CLOUD,
+        inCloudParams: { model: step.model, tools: step.grounded ? [{ googleSearch: {} }] : [], generationConfig: { temperature: 0.2 } },
+      }).generateContent(auditPrompt(bill, step.grounded))
+      grounded = step.grounded
+      break
+    } catch (e) {
+      last = e
+      if (!isRetryable(e) || i === plan.length - 1) throw e
+      // grounding refused for quota: retry at once without it; overload or rate limit: back off briefly
+      if (!(step.grounded && isQuota(e))) await new Promise((res) => setTimeout(res, 1500 * (i + 1)))
+    }
+  }
+  if (!r) throw last
   const data = parseJson<AuditResult>(r.response.text())
   const gm = r.response.candidates?.[0]?.groundingMetadata
   data.findings = (data.findings ?? []).map((f, i) => ({ ...f, id: f.id || `f${i + 1}`, amount: toNum(f.amount) ?? 0, lines: f.lines ?? [] }))
   data.sources = (gm?.groundingChunks ?? []).flatMap((c) => (c.web?.uri ? [{ title: c.web.title ?? c.web.uri, url: c.web.uri }] : []))
-  ledger.add({ stage: 'audit', direction: 'in', source: sourceOf(r), bytes: r.response.text().length, verdict: 'passed', preview: `${data.findings.length} findings, letter of ${data.letter?.length ?? 0} characters` })
-  return { data, source: sourceOf(r), ms: performance.now() - t0, searchEntryPoint: gm?.searchEntryPoint?.renderedContent, queries: gm?.webSearchQueries }
+  ledger.add({ stage: 'audit', direction: 'in', source: sourceOf(r), bytes: r.response.text().length, verdict: 'passed', preview: `${data.findings.length} findings, letter of ${data.letter?.length ?? 0} characters${grounded ? ', grounded in Google Search' : ', rules from model knowledge (no live search)'}` })
+  return { data, source: sourceOf(r), ms: performance.now() - t0, searchEntryPoint: gm?.searchEntryPoint?.renderedContent, queries: gm?.webSearchQueries, grounded }
 }
 
 // ── 5 · Explain (PREFER_ON_DEVICE) ─────────────────────────────────────────
 export async function explain(f: Finding, language = 'English'): Promise<Staged<string>> {
   const t0 = performance.now()
   setStage('explain')
-  const model = getGenerativeModel(firebase().ai, {
-    mode: InferenceMode.PREFER_ON_DEVICE,
-    inCloudParams: { model: policy().cloud_model },
-  })
-  const r = await model.generateContent(explainPrompt(f, language))
+  const pol = policy()
+  const models = [pol.cloud_model, pol.cloud_model_fallback].filter((m, i, a) => m && a.indexOf(m) === i)
+  let r: GenerateContentResult | undefined, last: unknown
+  for (const [i, model] of models.entries()) {
+    try {
+      // PREFER_ON_DEVICE: Nano when present; the cloud model only when it is not
+      r = await getGenerativeModel(firebase().ai, { mode: InferenceMode.PREFER_ON_DEVICE, inCloudParams: { model } }).generateContent(explainPrompt(f, language))
+      break
+    } catch (e) {
+      last = e
+      if (!isRetryable(e) || i === models.length - 1) throw e
+      await new Promise((res) => setTimeout(res, 1200))
+    }
+  }
+  if (!r) throw last
   const source = sourceOf(r)
   if (source === 'on_device') ledger.add({ stage: 'explain', direction: 'local', source, bytes: 0, verdict: 'local', preview: `Explained "${f.title}" on this device` })
   return { data: r.response.text().trim(), source, ms: performance.now() - t0 }

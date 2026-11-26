@@ -48,6 +48,7 @@ export default function Checker() {
   const [auditRes, setAuditRes] = useState<AuditResult | null>(null)
   const [auditSource, setAuditSource] = useState<Source>('in_cloud')
   const [entryPoint, setEntryPoint] = useState<string | undefined>()
+  const [grounded, setGrounded] = useState(true)
   const [blocked, setBlocked] = useState<Leak[] | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [progress, setProgress] = useState<number | null>(null)
@@ -158,7 +159,7 @@ export default function Checker() {
     setStep('auditing')
     try {
       const r = await runAudit(toSend)
-      setAuditRes(r.data); setAuditSource(r.source); setEntryPoint(r.searchEntryPoint); setStep('results')
+      setAuditRes(r.data); setAuditSource(r.source); setEntryPoint(r.searchEntryPoint); setGrounded(r.grounded); setStep('results')
     } catch (e) {
       setStep('review')
       if (e instanceof AirlockBreach) setBlocked(e.leaks)
@@ -320,6 +321,9 @@ export default function Checker() {
                   <SourceBadge source={auditSource} />
                 </div>
               </div>
+              {!grounded && (
+                <p className="ck-small ck-ungrounded">Rules cited from the model’s own knowledge: live Google Search grounding isn’t available on this project’s Gemini tier. Check each rule’s link before you send.</p>
+              )}
               <div className="ck-findings">
                 {auditRes.findings.map((f, i) => <FindingCard key={f.id} f={f} i={i} replay={replay} />)}
               </div>

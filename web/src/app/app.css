@@ -165,3 +165,4 @@
   .checker { display: block; padding: 0; }
   .letter-paper { border: 0; box-shadow: none; padding: 0; max-width: none; }
 }
+.ck-ungrounded { margin: 14px 0 0; padding: 10px 14px; border-left: 3px solid var(--ink-4); background: var(--paper-2); border-radius: 3px; }

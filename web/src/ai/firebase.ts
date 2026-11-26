@@ -11,11 +11,13 @@ export const configured = Boolean(env.VITE_FB_API_KEY && env.VITE_FB_PROJECT_ID 
 /** Policy defaults; Remote Config overrides them without a redeploy. */
 export const POLICY_DEFAULTS = {
   cloud_model: 'gemini-3.8-flash',
+  cloud_model_fallback: 'gemini-3.5-flash-lite',
   redaction_strictness: 'strict',
   allow_manual_airlock: true,
   send_icd: false,
   audit_prompt_version: 'v1',
   max_lines: 60,
+  use_grounding: true,
 }
 export type Policy = typeof POLICY_DEFAULTS
 
@@ -67,11 +69,13 @@ export function policy(): Policy {
   if (!configured || !rc) return POLICY_DEFAULTS
   return {
     cloud_model: getValue(rc, 'cloud_model').asString() || POLICY_DEFAULTS.cloud_model,
+    cloud_model_fallback: getValue(rc, 'cloud_model_fallback').asString() || POLICY_DEFAULTS.cloud_model_fallback,
     redaction_strictness: getValue(rc, 'redaction_strictness').asString(),
     allow_manual_airlock: getValue(rc, 'allow_manual_airlock').asBoolean(),
     send_icd: getValue(rc, 'send_icd').asBoolean(),
     audit_prompt_version: getValue(rc, 'audit_prompt_version').asString(),
     max_lines: getValue(rc, 'max_lines').asNumber() || POLICY_DEFAULTS.max_lines,
+    use_grounding: getValue(rc, 'use_grounding').asBoolean(),
   }
 }
 

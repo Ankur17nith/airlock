@@ -18,6 +18,8 @@ Airlock is a static web app (Vite + React + TypeScript) on Firebase Hosting. The
 | 4 Write | none | letter with tokens + vault | final letter | No |
 | 5 Explain | `getGenerativeModel(ai, { mode: PREFER_ON_DEVICE, inCloudParams: { model: rc.cloud_model } })` | one finding (no identity) | plain-language paragraph | Only if Nano is unavailable, and the input has no identity |
 
+**Resilience.** The audit tries `cloud_model` with Google Search grounding, then without grounding, then `cloud_model_fallback` (both in Remote Config), retrying only on quota (429) and overload (500/503). The Gemini free tier has no grounding quota, so on that tier the audit runs ungrounded and the UI says the rules come from the model's knowledge. Explain falls back across the same two models. Never across inference modes: Read stays `ONLY_ON_DEVICE`.
+
 Every result is wrapped as `{ data, source: response.inferenceSource }` and the UI badge reads `source`. We never infer it.
 
 ## Why Read is `ONLY_ON_DEVICE` and not `PREFER_ON_DEVICE`

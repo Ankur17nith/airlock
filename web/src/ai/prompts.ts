@@ -13,9 +13,9 @@ Return JSON only, matching the schema.
 
 Never invent a value. If a number is unreadable, leave the field out.`
 
-export const auditPrompt = (bill: SealedBill) => `You are a US medical billing advocate reviewing an anonymised bill for a patient. Identity has been removed on the patient's device and replaced with placeholders; never ask for it and never invent it.
+export const auditPrompt = (bill: SealedBill, grounded = true) => `You are a US medical billing advocate reviewing an anonymised bill for a patient. Identity has been removed on the patient's device and replaced with placeholders; never ask for it and never invent it.
 
-Find charges the patient may not owe or should question. Check, using Google Search for current rules when useful:
+Find charges the patient may not owe or should question. Check${grounded ? ', using Google Search for current rules when useful' : ' from your knowledge of current US billing rules (no web search is available, so cite only rules you are sure of)'}:
 - duplicate lines (same code, same day, beyond the CMS NCCI medically unlikely edit units)
 - unbundling (NCCI procedure-to-procedure edits: components billed separately from a comprehensive code)
 - upcoding (e.g. ED E/M level 99285 requires high-complexity medical decision making under the 2023 AMA ED E/M guidelines)

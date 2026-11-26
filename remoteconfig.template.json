@@ -1,10 +1,12 @@
 {
   "parameters": {
     "cloud_model": { "defaultValue": { "value": "gemini-3.8-flash" }, "description": "Cloud model for the audit and the explain fallback", "valueType": "STRING" },
+    "cloud_model_fallback": { "defaultValue": { "value": "gemini-3.5-flash-lite" }, "description": "Lighter model used when the main one is busy or over quota", "valueType": "STRING" },
     "redaction_strictness": { "defaultValue": { "value": "strict" }, "description": "strict | standard. strict also sweeps descriptions for ID-like tokens", "valueType": "STRING" },
     "allow_manual_airlock": { "defaultValue": { "value": "true" }, "description": "Offer canvas redaction when Gemini Nano is unavailable", "valueType": "BOOLEAN" },
     "send_icd": { "defaultValue": { "value": "false" }, "description": "Send ICD-10 codes to the audit (off: diagnosis stays on device)", "valueType": "BOOLEAN" },
     "audit_prompt_version": { "defaultValue": { "value": "v1" }, "description": "Audit prompt revision", "valueType": "STRING" },
+    "use_grounding": { "defaultValue": { "value": "true" }, "description": "Ground the audit in Google Search. Falls back automatically when the Gemini tier has no grounding quota", "valueType": "BOOLEAN" },
     "max_lines": { "defaultValue": { "value": "60" }, "description": "Maximum line items per audit", "valueType": "NUMBER" }
   }
 }

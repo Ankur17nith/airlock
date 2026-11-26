@@ -29,3 +29,17 @@ describe('the audit prompt that is actually sent', () => {
     expect(body).toContain('99285')
   })
 })
+
+describe('audit fallback plan', () => {
+  it('tries grounding first, then the same model ungrounded, then the fallback model', async () => {
+    const { auditPlan } = await import('./stages')
+    expect(auditPlan('a', 'b', true)).toEqual([{ model: 'a', grounded: true }, { model: 'a', grounded: false }, { model: 'b', grounded: false }])
+    expect(auditPlan('a', 'a', false)).toEqual([{ model: 'a', grounded: false }])
+  })
+  it('retries quota and overload errors, not others', async () => {
+    const { isRetryable } = await import('./stages')
+    expect(isRetryable(new Error('[429 Too Many Requests] quota'))).toBe(true)
+    expect(isRetryable(new Error('[500 Internal Server Error] high demand'))).toBe(true)
+    expect(isRetryable(new Error('[401 Unauthorized] App Check token is invalid'))).toBe(false)
+  })
+})
