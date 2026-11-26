@@ -1,5 +1,5 @@
 import { initializeApp, type FirebaseApp } from 'firebase/app'
-import { initializeAppCheck, ReCaptchaEnterpriseProvider } from 'firebase/app-check'
+import { initializeAppCheck, ReCaptchaEnterpriseProvider, ReCaptchaV3Provider } from 'firebase/app-check'
 import { getAuth, signInAnonymously } from 'firebase/auth'
 import { fetchAndActivate, getRemoteConfig, getValue, type RemoteConfig } from 'firebase/remote-config'
 import { doc, getFirestore, increment, setDoc, getDoc, type Firestore } from 'firebase/firestore'
@@ -38,7 +38,11 @@ export function firebase() {
       appId: env.VITE_FB_APP_ID,
     })
     if (env.VITE_RECAPTCHA_SITE_KEY) {
-      initializeAppCheck(app, { provider: new ReCaptchaEnterpriseProvider(env.VITE_RECAPTCHA_SITE_KEY), isTokenAutoRefreshEnabled: true })
+      // 'enterprise' (default) or 'v3', matching the provider registered in App Check
+      const provider = env.VITE_RECAPTCHA_PROVIDER === 'v3'
+        ? new ReCaptchaV3Provider(env.VITE_RECAPTCHA_SITE_KEY)
+        : new ReCaptchaEnterpriseProvider(env.VITE_RECAPTCHA_SITE_KEY)
+      initializeAppCheck(app, { provider, isTokenAutoRefreshEnabled: true })
     }
     ai = getAI(app, { backend: new GoogleAIBackend() })
     db = getFirestore(app)
