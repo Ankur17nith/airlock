@@ -34,19 +34,7 @@ function getReadModel() {
   return readModel
 }
 
-// ── on-device availability (Chrome's Prompt API, for the UI only) ──────────
-export type NanoState = 'unsupported' | 'unavailable' | 'downloadable' | 'downloading' | 'available'
-interface LanguageModelStatic { availability(o?: object): Promise<string> }
-
-export async function nanoState(): Promise<NanoState> {
-  const LM = (globalThis as unknown as { LanguageModel?: LanguageModelStatic }).LanguageModel
-  if (!LM) return 'unsupported'
-  try {
-    return (await LM.availability({ expectedInputs: [{ type: 'text', languages: ['en'] }, { type: 'image' }] })) as NanoState
-  } catch {
-    return 'unavailable'
-  }
-}
+export { nanoState, type NanoState } from './nano'
 
 /** Must be called from a click: Chrome only starts a model download after a user gesture. */
 export async function prepareNano(onProgress: (fraction: number) => void): Promise<void> {

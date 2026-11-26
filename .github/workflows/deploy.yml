@@ -1,62 +1,110 @@
-# Test, build and deploy Airlock to Firebase (project airlock-hybrid-918b1) on every push to main.
+# CI/CD for Airlock.
 #
-# Needs one repository secret, FIREBASE_SERVICE_ACCOUNT: the JSON key of a service account with the
-# roles Firebase Admin, Service Usage Consumer and API Keys Viewer. Setup: docs/human-runbook.md §5b.
-# Deploys only if the tests pass; a failing test stops the deploy.
-name: deploy
+#   check   every push and pull request: install → typecheck → lint → 56 tests → build
+#   deploy  pushes to main (and the "Run workflow" button), only after check passes:
+#           Firebase Hosting + Firestore rules + Remote Config, then a smoke test of the live site
+#
+# Deploy needs one repository secret, FIREBASE_SERVICE_ACCOUNT: the JSON key of a service account
+# with the roles Firebase Admin, Service Usage Consumer and API Keys Viewer (docs/human-runbook.md §5b).
+# Until that secret exists, deploy is skipped with a notice and the run stays green.
+name: ci-cd
 
 on:
   push:
     branches: [main]
-  workflow_dispatch: # "Run workflow" button in the Actions tab
+  pull_request:
+  workflow_dispatch:
 
-concurrency:
-  group: deploy
-  cancel-in-progress: true
+permissions:
+  contents: read
 
 jobs:
-  deploy:
+  check:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
+    defaults:
+      run:
+        working-directory: web
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: 22
           cache: npm
           cache-dependency-path: web/package-lock.json
 
       - name: Install
-        working-directory: web
         run: npm ci
 
       - name: Typecheck, lint and test
-        working-directory: web
         run: npm run check
 
       - name: Build
-        working-directory: web
         run: npm run build
 
-      - name: Deploy hosting, Firestore rules and Remote Config
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: web/dist
+          retention-days: 7
+
+  deploy:
+    needs: check
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    concurrency:
+      group: deploy-production
+      cancel-in-progress: false # never interrupt a deploy half-way
+    environment:
+      name: production
+      url: https://airlock-hybrid-918b1.web.app
+    steps:
+      - name: Look for the deploy key
+        id: key
         env:
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
         run: |
-          if [ -z "$FIREBASE_SERVICE_ACCOUNT" ]; then
-            echo "::error::Add the FIREBASE_SERVICE_ACCOUNT repository secret (docs/human-runbook.md §5b)"
-            exit 1
+          if [ -n "$FIREBASE_SERVICE_ACCOUNT" ]; then
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "present=false" >> "$GITHUB_OUTPUT"
+            echo "::notice title=Deploy skipped::Add the FIREBASE_SERVICE_ACCOUNT repository secret to enable automatic deploys (docs/human-runbook.md §5b)."
           fi
-          printf '%s' "$FIREBASE_SERVICE_ACCOUNT" > "$RUNNER_TEMP/sa.json"
-          export GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/sa.json"
+
+      - uses: actions/checkout@v5
+        if: steps.key.outputs.present == 'true'
+
+      - uses: actions/download-artifact@v4
+        if: steps.key.outputs.present == 'true'
+        with:
+          name: dist
+          path: web/dist
+
+      - uses: actions/setup-node@v5
+        if: steps.key.outputs.present == 'true'
+        with:
+          node-version: 22
+
+      - name: Deploy hosting, Firestore rules and Remote Config
+        if: steps.key.outputs.present == 'true'
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        run: |
+          key="$RUNNER_TEMP/firebase-sa.json"
+          printf '%s' "$FIREBASE_SERVICE_ACCOUNT" > "$key"
+          trap 'rm -f "$key"' EXIT
+          export GOOGLE_APPLICATION_CREDENTIALS="$key"
           npx -y firebase-tools@latest deploy \
             --only hosting,firestore:rules,remoteconfig \
             --project airlock-hybrid-918b1 --non-interactive --force
-          rm -f "$RUNNER_TEMP/sa.json"
 
       - name: Smoke-test the live site
+        if: steps.key.outputs.present == 'true'
         run: |
-          code=$(curl -s -o /dev/null -w '%{http_code}' https://airlock-hybrid-918b1.web.app/)
-          echo "live site: HTTP $code"
-          test "$code" = 200
+          for i in 1 2 3 4 5; do
+            code=$(curl -s -o /dev/null -w '%{http_code}' https://airlock-hybrid-918b1.web.app/)
+            echo "attempt $i: HTTP $code"
+            [ "$code" = 200 ] && exit 0
+            sleep 6
+          done
+          exit 1

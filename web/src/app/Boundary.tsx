@@ -1,16 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { ledger } from '../airlock/ledger'
+import { useLedger } from '../hooks'
 import type { LedgerEntry } from '../airlock/types'
 
 const SOURCE_LABEL: Record<LedgerEntry['source'], string> = {
   on_device: 'On device', in_cloud: 'In cloud', local: 'Local code', replay: 'Replay',
-}
-
-export function useLedger() {
-  const [entries, setEntries] = useState(ledger.all())
-  useEffect(() => ledger.subscribe(setEntries), [])
-  return entries
 }
 
 const fmtBytes = (n: number) => (n < 1024 ? `${n} B` : `${(n / 1024).toFixed(1)} KB`)

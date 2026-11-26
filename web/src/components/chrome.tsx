@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react'
-import { nanoState, type NanoState } from '../ai/stages'
+import { useState } from 'react'
+import type { NanoState } from '../ai/nano'
+import { useNano } from '../hooks'
 
 export function Mark({ size = 28 }: { size?: number }) {
   const s = 120, r = s * 0.24, cx = s / 2, cy = s / 2, w = s * 0.075, sw = s * 0.06
@@ -22,11 +23,6 @@ export function Wordmark() {
   )
 }
 
-export function useNano() {
-  const [state, setState] = useState<NanoState | 'checking'>('checking')
-  useEffect(() => { nanoState().then(setState) }, [])
-  return [state, setState] as const
-}
 
 const NANO_LABEL: Record<NanoState | 'checking', string> = {
   checking: 'Checking device…',
