@@ -1,0 +1,14 @@
+[
+  {"id": "01", "voice": "maya",  "text": "This is my ER bill. Twelve hundred and eighty-four dollars... for a sprained wrist."},
+  {"id": "02", "voice": "maya",  "text": "Forty-three percent of Americans have had a medical bill they thought was wrong. Fewer than half ever push back. And the ones who do? More than a third get it cut."},
+  {"id": "03", "voice": "maya",  "text": "So why not just ask an AI? Because to ask, I'd have to hand over my name, my birthday, my insurance ID... my diagnosis."},
+  {"id": "04", "voice": "arjun", "text": "So we built Airlock."},
+  {"id": "05", "voice": "arjun", "text": "Airlock splits the work across a wall. On your laptop, Gemini Nano reads the bill, in only-on-device mode, so it can never quietly fall back to the cloud. Your identity goes into a vault. Only anonymous line items cross, and cloud Gemini audits them against real billing rules, grounded in Google Search."},
+  {"id": "06", "voice": "arjun", "text": "Watch. Nano reads the photo, right here. Name, member ID, birthday, the hospital... each one becomes a token. The real values stay in an encrypted vault, on this laptop."},
+  {"id": "07", "voice": "arjun", "text": "And before a single byte leaves, a guard, written in code, not in a prompt, checks it. Hide an ID in a description, and the request is blocked."},
+  {"id": "08", "voice": "maya",  "text": "It found the X-ray, billed twice. Two hundred and twelve dollars. And it questioned a level-five ER code for a sprained wrist, and told me which rule it's relying on."},
+  {"id": "09", "voice": "arjun", "text": "The cloud drafts the dispute letter with placeholders. Back on the device, Airlock fills in the real details. The finished letter never leaves your laptop."},
+  {"id": "10", "voice": "arjun", "text": "Turn the internet off, and the private half still works. Explanations run on-device when they can, and in the cloud when they can't, because they carry no identity."},
+  {"id": "11", "voice": "arjun", "text": "One SDK. Three inference modes, each one chosen on purpose."},
+  {"id": "12", "voice": "maya",  "text": "Airlock. Fight the bill... not your privacy."}
+]
