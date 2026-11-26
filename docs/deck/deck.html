@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Airlock deck</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,500..800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&family=Instrument+Serif:ital@1&display=block" rel="stylesheet">
+<style>
+@page { size: 1920px 1080px; margin: 0 }
+:root{--paper:#F5F3EF;--paper-2:#EFECE6;--card:#FBFAF8;--grid:#E7E2DA;--rule:#DCD5CB;--ink:#1D1726;--ink-2:#43394C;--ink-3:#71697A;--ink-4:#9A93A2;--coral:#E5484D;--coral-wash:#FBE5E4;--teal:#21918C;--teal-wash:#DDF0EE;--amber:#C98A1B;--amber-wash:#FBF0DA;--violet:#5B3FD0;--night:#14141C;
+--display:"Archivo",sans-serif;--serif:"Instrument Serif",serif;--sans:"IBM Plex Sans",sans-serif;--mono:"IBM Plex Mono",monospace}
+*{box-sizing:border-box}body{margin:0;font-family:var(--sans);-webkit-font-smoothing:antialiased;color:var(--ink-2)}
+.slide{width:1920px;height:1080px;position:relative;overflow:hidden;page-break-after:always;padding:110px 130px;
+  background-color:var(--paper);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:32px 32px}
+.slide.dark{background:var(--night);color:#CFC8D8}
+.n{position:absolute;right:130px;bottom:70px;font:500 18px var(--mono);color:var(--ink-4);letter-spacing:.08em}
+.logo{position:absolute;left:130px;bottom:62px;height:34px}
+.eyebrow{font:500 20px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.dark .eyebrow{color:#9A93A2}
+h1,h2{font-family:var(--display);font-variation-settings:"wdth" 125;font-weight:800;letter-spacing:-.035em;line-height:1;color:var(--ink);margin:26px 0 0}
+.dark h2{color:#F5F3EF}
+h1{font-size:150px}h2{font-size:84px}
+.accent{font-family:var(--serif);font-style:italic;font-weight:400;letter-spacing:-.01em}
+.lead{font:300 36px/1.45 var(--sans);color:var(--ink-2);max-width:1300px;margin:36px 0 0}
+.dark .lead{color:#CFC8D8}
+.mono{font-family:var(--mono)}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;margin-top:70px}
+.stat .v{font-family:var(--display);font-variation-settings:"wdth" 125;font-weight:800;font-size:150px;line-height:1;letter-spacing:-.045em;color:#F5F3EF}
+.stat p{font:400 30px/1.4 var(--sans);margin:22px 0 14px}.stat .src{font:500 16px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:#7C7488}
+.card{background:var(--card);border:1px solid var(--rule);border-radius:10px;box-shadow:0 24px 60px -40px rgba(29,23,38,.5);padding:36px 38px}
+.card h3{font:600 36px/1.2 var(--sans);color:var(--ink);margin:18px 0 12px}.card p{font:400 25px/1.5 var(--sans);margin:0}
+.badge{display:inline-flex;align-items:center;gap:10px;padding:8px 14px;border-radius:6px;font:500 18px/1 var(--mono);letter-spacing:.05em}
+.badge::before{content:"";width:10px;height:10px;border-radius:50%;background:currentColor}
+.d{background:var(--coral-wash);color:var(--coral)}.c{background:var(--teal-wash);color:var(--teal)}.h{background:#ECE8F8;color:var(--violet)}.x{background:var(--paper-2);color:var(--ink-3)}
+table{border-collapse:collapse;width:100%;margin-top:56px;font-size:28px}
+th{text-align:left;font:500 18px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);padding:14px 16px;border-bottom:2px solid var(--ink)}
+td{padding:17px 16px;border-bottom:1px solid var(--rule);vertical-align:top;color:var(--ink)}
+td small{display:block;color:var(--ink-3);font-size:23px;margin-top:6px}
+.shot{border-radius:10px;box-shadow:0 30px 70px -36px rgba(29,23,38,.55),0 0 0 1px var(--rule);display:block}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+.tok{display:inline-block;background:var(--coral-wash);color:var(--coral);font:500 .8em var(--mono);padding:2px 10px;border-radius:5px}
+ul.t{list-style:none;padding:0;margin:40px 0 0;display:grid;gap:22px}
+ul.t li{font:400 30px/1.4 var(--sans);padding-left:40px;position:relative}
+ul.t li::before{content:"";position:absolute;left:4px;top:.5em;width:16px;height:9px;border:solid var(--teal);border-width:0 0 3px 3px;transform:rotate(-45deg)}
+ul.t b{color:var(--ink);font-weight:600}
+pre{font:400 24px/1.6 var(--mono);background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:30px 34px;margin:0;color:var(--ink-2);white-space:pre-wrap}
+mark{background:var(--coral-wash);color:var(--coral);outline:2px solid var(--coral);border-radius:3px;padding:0 4px}
+</style>
+</head>
+<body>
+
+<!-- 1 -->
+<section class="slide" style="display:grid;place-items:center;text-align:center">
+  <div>
+    <img src="../../brand/airlock-mark.svg" style="height:150px;margin:0 auto 40px;display:block" alt="">
+    <h1 style="margin:0">Fight the bill,<br><span class="accent" style="font-size:1.06em">not your privacy</span></h1>
+    <p class="lead" style="margin:44px auto 0">On-device Gemini Nano seals your identity. Cloud Gemini audits the anonymous charges. One Firebase AI Logic SDK.</p>
+    <p class="eyebrow" style="margin-top:60px">#BuildHybridAI 2026 · Web (Chrome) · Apache-2.0</p>
+  </div>
+</section>
+
+<!-- 2 -->
+<section class="slide dark">
+  <div class="eyebrow">┤ The problem ├</div>
+  <h2>People believe the bill is wrong. <span class="accent">Almost nobody fights it.</span></h2>
+  <div class="grid3">
+    <div class="stat"><div class="v" style="color:#F26B6F">43%</div><p>of US adults have had a medical bill they believed was wrong</p><div class="src">KFF Health Care Debt Survey (2022)</div></div>
+    <div class="stat"><div class="v">&lt; ½</div><p>of insured adults with a surprise bill ever challenge it, mostly because they didn’t know they could</p><div class="src">Commonwealth Fund, 2024</div></div>
+    <div class="stat"><div class="v" style="color:#3DB5AF">38%</div><p>of people who dispute get the bill reduced or cancelled</p><div class="src">Commonwealth Fund, 2024</div></div>
+  </div>
+  <div class="n">02</div>
+</section>
+
+<!-- 3 -->
+<section class="slide">
+  <div class="eyebrow">┤ The trap ├</div>
+  <h2>The help exists. <span class="accent">The price is your record.</span></h2>
+  <p class="lead">Reading codes, knowing the rules and writing the letter is exactly what language models are good at. But asking one today means pasting your <span class="tok">NAME</span> <span class="tok">BIRTHDAY</span> <span class="tok">INSURANCE ID</span> <span class="tok">DIAGNOSIS</span> into a chatbot.</p>
+  <p class="lead">And the obvious hybrid design has a trap of its own: <b style="color:var(--ink);font-weight:500">PREFER_ON_DEVICE</b> quietly sends the request to the cloud whenever the device has no model.</p>
+  <img class="logo" src="../../brand/airlock-logo.svg" alt=""><div class="n">03</div>
+</section>
+
+<!-- 4 -->
+<section class="slide">
+  <div class="eyebrow">┤ The idea ├</div>
+  <h2 style="font-size:66px">The model that knows your name<br><span class="accent">never meets</span> the model that knows billing.</h2>
+  <table style="margin-top:40px;font-size:26px">
+    <tr><th>Stage</th><th>Where</th><th>Mode</th><th>Why</th></tr>
+    <tr><td>1 · Read the bill photo</td><td>Gemini Nano, in Chrome</td><td><span class="badge d">ONLY_ON_DEVICE</span></td><td>The image holds identity. No silent fallback: no Nano, no cloud.</td></tr>
+    <tr><td>2 · Seal identity · guard</td><td>Plain code</td><td><span class="badge x">no model</span></td><td>Vault + tokens; a deterministic leak check wraps <span class="mono">fetch</span>.</td></tr>
+    <tr><td>3 · Audit the charges</td><td>Gemini + Google Search</td><td><span class="badge c">ONLY_IN_CLOUD</span></td><td>Needs current rules and a bigger model. Sees codes and amounts only.</td></tr>
+    <tr><td>4 · Write the letter</td><td>Plain code</td><td><span class="badge x">no model</span></td><td>Your details are filled in on the device.</td></tr>
+    <tr><td>5 · Explain a finding</td><td>Nano, else Gemini</td><td><span class="badge h">PREFER_ON_DEVICE</span></td><td>No identity in the input, so the fallback is safe.</td></tr>
+  </table>
+  <img class="logo" src="../../brand/airlock-logo.svg" alt=""><div class="n">04</div>
+</section>
+
+<!-- 5 -->
+<section class="slide">
+  <div class="two">
+    <div>
+      <div class="eyebrow">┤ Read + seal · on device ├</div>
+      <h2 style="font-size:72px">Each identifier <span class="accent">becomes a token.</span></h2>
+      <ul class="t">
+        <li><b>The image never leaves.</b> Nano reads it into JSON under a schema.</li>
+        <li><b>Identity goes into a vault:</b> AES-GCM in IndexedDB, 24 hours.</li>
+        <li><b>Dates become day offsets.</b> Codes and amounts stay exact.</li>
+      </ul>
+    </div>
+    <img class="shot" src="../assets/screens/sealed.jpg" style="width:100%" alt="Sealed identity and the exact payload that will cross">
+  </div>
+  <img class="logo" src="../../brand/airlock-logo.svg" alt=""><div class="n">05</div>
+</section>
+
+<!-- 6 -->
+<section class="slide">
+  <div class="two">
+    <div>
+      <div class="eyebrow">┤ The guard ├</div>
+      <h2 style="font-size:72px">Code, <span class="accent">not a prompt.</span></h2>
+      <p class="lead" style="font-size:30px">Before any byte leaves, the exact request is scanned for every sealed value written any way: upper case, reordered, digits only, last six digits, fourteen date formats. One hit and the request is refused.</p>
+      <pre style="margin-top:36px">"description": "Therapeutic injection, IM
+                ref <mark>884120937</mark>"
+<span style="color:var(--coral)">→ BLOCKED · MEMBER_ID (digits) · 88•••••37</span></pre>
+    </div>
+    <img class="shot" src="../assets/screens/blocked.jpg" style="width:100%" alt="The guard blocking a request with a smuggled member ID">
+  </div>
+  <img class="logo" src="../../brand/airlock-logo.svg" alt=""><div class="n">06</div>
+</section>
+
+<!-- 7 -->
+<section class="slide">
+  <div class="two">
+    <img class="shot" src="../assets/screens/findings.jpg" style="width:100%" alt="Findings with cited rules">
+    <div>
+      <div class="eyebrow">┤ Audit · in the cloud ├</div>
+      <h2 style="font-size:72px">Every finding <span class="accent">cites its rule.</span></h2>
+      <ul class="t">
+        <li><b>Duplicates, unbundling, upcoding,</b> surprise-billing protections, appealable denials.</li>
+        <li><b>Grounded in Google Search;</b> sources and search suggestions shown.</li>
+        <li><b>No citation, no claim:</b> it becomes a question to ask the billing office.</li>
+      </ul>
+    </div>
+  </div>
+  <img class="logo" src="../../brand/airlock-logo.svg" alt=""><div class="n">07</div>
+</section>
+
+<!-- 8 -->
+<section class="slide">
+  <div class="two">
+    <div>
+      <div class="eyebrow">┤ Write · on device ├</div>
+      <h2 style="font-size:72px">Placeholders in the cloud. <span class="accent">Your name, only here.</span></h2>
+      <ul class="t">
+        <li><b>The cloud drafts with tokens:</b> <span class="tok">⟦PATIENT_NAME⟧</span></li>
+        <li><b>The vault fills them in locally.</b> Print, copy, done.</li>
+        <li><b>Every crossing is in the boundary panel,</b> exportable as JSON.</li>
+      </ul>
+    </div>
+    <img class="shot" src="../assets/screens/letter.jpg" style="width:100%" alt="The dispute letter filled in on the device">
+  </div>
+  <img class="logo" src="../../brand/airlock-logo.svg" alt=""><div class="n">08</div>
+</section>
+
+<!-- 9 -->
+<section class="slide">
+  <div class="eyebrow">┤ Built on Firebase ├</div>
+  <h2>One SDK. <span class="accent">Every product doing a real job.</span></h2>
+  <div class="grid3">
+    <div class="card" style="border-top:5px solid var(--coral)"><span class="badge d">AI Logic</span><h3>Hybrid inference</h3><p>Three modes, each chosen on purpose; <span class="mono">inferenceSource</span> shown on every output.</p></div>
+    <div class="card"><span class="badge x">App Check</span><h3>reCAPTCHA Enterprise</h3><p>In front of AI Logic; debug token for judges.</p></div>
+    <div class="card"><span class="badge x">Auth</span><h3>Anonymous sign-in</h3><p>Gates the only Firestore write.</p></div>
+    <div class="card"><span class="badge x">Remote Config</span><h3>Policy without redeploys</h3><p>Cloud model, redaction strictness, ICD codes on or off.</p></div>
+    <div class="card"><span class="badge x">Firestore</span><h3>Outcome counters</h3><p>Finding type × won / lost. Increment-only rules. No text, no amounts.</p></div>
+    <div class="card" style="border-top:5px solid var(--teal)"><span class="badge c">Hosting</span><h3>Strict CSP</h3><p>No third-party scripts or analytics: nowhere for a bill to go.</p></div>
+  </div>
+  <div class="n">09</div>
+</section>
+
+<!-- 10 -->
+<section class="slide">
+  <div class="eyebrow">┤ Who it’s for, and what’s next ├</div>
+  <h2>Your bill. <span class="accent">Your device.</span></h2>
+  <div class="grid3" style="margin-top:60px">
+    <div class="card"><h3 style="margin-top:0">Patients &amp; caregivers</h3><p>Anyone holding a confusing bill or denial who won’t paste their record into a chatbot.</p></div>
+    <div class="card"><h3 style="margin-top:0">Patient advocates</h3><p>Bound to confidentiality. A workspace where nothing identifying leaves their laptop.</p></div>
+    <div class="card"><h3 style="margin-top:0">Android · iOS · India</h3><p>Same SDK on Gemini Nano (Android) and Apple Foundation Models; TPA cashless-claim rejections.</p></div>
+  </div>
+  <p class="lead mono" style="font-size:28px;margin-top:70px">airlock-hybrid.web.app · github.com/Ankur17nith/airlock</p>
+  <img class="logo" src="../../brand/airlock-logo.svg" alt=""><div class="n">10</div>
+</section>
+
+</body>
+</html>
