@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Airlock film</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,500..800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&family=Instrument+Serif:ital@1&display=block" rel="stylesheet">
+<style>
+:root{--paper:#F5F3EF;--paper-2:#EFECE6;--card:#FBFAF8;--grid:#E7E2DA;--rule:#DCD5CB;--ink:#1D1726;--ink-2:#43394C;--ink-3:#71697A;--ink-4:#9A93A2;
+--coral:#E5484D;--coral-wash:#FBE5E4;--teal:#21918C;--teal-wash:#DDF0EE;--amber:#C98A1B;--amber-wash:#FBF0DA;--violet:#5B3FD0;--night:#14141C;
+--display:"Archivo",sans-serif;--serif:"Instrument Serif",serif;--sans:"IBM Plex Sans",sans-serif;--mono:"IBM Plex Mono",monospace}
+*{box-sizing:border-box}html,body{margin:0;width:1920px;height:1080px;overflow:hidden;background:var(--night)}
+body{font-family:var(--sans);-webkit-font-smoothing:antialiased}
+.scene{position:absolute;inset:0;display:none;overflow:hidden}
+.paper{background-color:var(--paper);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:32px 32px}
+.night{background:var(--night);color:#EDE9F2}
+.display{font-family:var(--display);font-variation-settings:"wdth" 125;font-weight:800;letter-spacing:-.035em;line-height:.98;color:var(--ink);margin:0}
+.accent{font-family:var(--serif);font-style:italic;font-weight:400;letter-spacing:-.01em}
+.mono{font-family:var(--mono)}
+.eyebrow{font:500 18px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.night .eyebrow{color:#9A93A2}
+.abs{position:absolute}
+.token{display:inline-flex;align-items:center;gap:8px;padding:2px 12px;border-radius:5px;background:var(--coral-wash);color:var(--coral);font:500 26px/1.5 var(--mono)}
+.badge{display:inline-flex;align-items:center;gap:10px;padding:8px 14px;border-radius:6px;font:500 17px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase}
+.badge::before{content:"";width:10px;height:10px;border-radius:50%;background:currentColor}
+.b-dev{background:var(--coral-wash);color:var(--coral)}.b-cloud{background:var(--teal-wash);color:var(--teal)}
+
+/* 1 bill */
+#bill-img{position:absolute;width:820px;left:250px;top:150px;transform-origin:50% 50%;box-shadow:0 40px 90px -30px rgba(0,0,0,.7);border-radius:4px}
+#bill-ring{position:absolute;left:0;top:0;overflow:visible}
+#bill-amt{position:absolute;left:1190px;top:360px;font:500 120px/1 var(--mono);color:#fff;letter-spacing:-.03em}
+#bill-sub{position:absolute;left:1196px;top:510px;font:300 44px/1.2 var(--sans);color:#CFC8D8}
+#bill-sub em{font-family:var(--serif);font-size:1.15em;color:#fff}
+
+/* 2 stats */
+.stat{position:absolute;top:330px;width:500px}
+.stat .n{font-family:var(--display);font-variation-settings:"wdth" 125;font-weight:800;font-size:170px;line-height:1;letter-spacing:-.045em;color:#F5F3EF}
+.stat p{font:400 30px/1.4 var(--sans);color:#CFC8D8;margin:26px 0 16px}
+.stat .src{font:500 15px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:#7C7488}
+
+/* 3 trap */
+#chat{position:absolute;left:260px;top:170px;width:880px;background:#1E1D29;border:1px solid #33313F;border-radius:18px;padding:34px 38px;box-shadow:0 40px 90px -40px rgba(0,0,0,.8)}
+#chat .hd{font:500 20px var(--sans);color:#A49CB0;margin-bottom:22px}
+#chat pre{margin:0;font:400 27px/1.65 var(--mono);color:#CFC8D8;white-space:pre-wrap}
+#chat .hl{border-radius:4px;padding:0 4px;transition:none}
+#chat .send{margin-top:26px;display:flex;justify-content:flex-end}
+#chat .send span{background:#EDE9F2;color:#14141C;font:600 20px var(--sans);padding:12px 22px;border-radius:999px}
+#trap-tags{position:absolute;left:1220px;top:220px;display:grid;gap:22px}
+#trap-tags div{font:500 30px var(--mono);letter-spacing:.06em;color:var(--coral);background:rgba(242,107,111,.12);border:1px solid rgba(242,107,111,.4);padding:14px 22px;border-radius:8px}
+#trap-out{position:absolute;left:1220px;top:700px;font:300 40px/1.3 var(--sans);color:#EDE9F2}
+#trap-out em{font-family:var(--serif);color:#fff;font-size:1.12em}
+
+/* 4 title */
+#wipe{position:absolute;top:0;bottom:0;left:50%;width:0;background:var(--paper);transform:translateX(-50%)}
+#title-wrap{position:absolute;inset:0;display:grid;place-items:center;text-align:center}
+#title-wrap .display{font-size:150px}
+#title-wrap .tag{font-size:76px;margin-top:22px}
+
+/* 5 wall */
+#iso{position:absolute;left:0;top:0}
+.lbl{position:absolute;transform:translate(-50%,-100%);text-align:center;white-space:nowrap}
+.lbl b{display:inline-block;font:600 26px var(--sans);color:var(--ink);background:rgba(245,243,239,.94);padding:2px 10px;border-radius:5px}
+.lbl span{display:inline-block;margin-top:6px;font:500 15px var(--mono);letter-spacing:.06em;padding:5px 10px;border-radius:5px}
+.lbl .d{background:var(--coral-wash);color:var(--coral)}.lbl .c{background:var(--teal-wash);color:var(--teal)}.lbl .n{background:var(--paper-2);color:var(--ink-3)}
+#wall-cap{position:absolute;left:110px;top:640px;width:760px}
+#wall-cap .display{font-size:64px}
+#side-dev,#side-cloud{position:absolute;font:500 20px var(--mono);letter-spacing:.12em}
+#side-dev{color:var(--coral)}#side-cloud{color:var(--teal)}
+
+/* 6 app */
+#win{position:absolute;left:64px;top:118px;width:1382px;border-radius:12px;overflow:hidden;box-shadow:0 30px 80px -30px rgba(29,23,38,.45),0 0 0 1px var(--rule);background:#fff}
+#win .bar{height:40px;background:#EDEAE4;display:flex;align-items:center;gap:9px;padding:0 16px;border-bottom:1px solid var(--rule)}
+#win .bar i{width:13px;height:13px;border-radius:50%;background:#D7D1C8;display:block}
+#win .url{margin-left:22px;flex:1;max-width:640px;background:#F8F6F2;border-radius:7px;font:400 15px var(--mono);color:var(--ink-3);padding:6px 14px}
+#appimg{display:block;width:1382px;height:777px}
+#app-note{position:absolute;left:64px;top:946px;font:500 15px var(--mono);letter-spacing:.06em;color:var(--ink-3);text-transform:uppercase}
+#say{position:absolute;left:1500px;top:150px;width:370px}
+#say .eyebrow{display:block;margin-bottom:26px}
+.sayline{font-family:var(--display);font-variation-settings:"wdth" 112;font-weight:750;font-size:50px;line-height:1.04;letter-spacing:-.03em;color:var(--ink);margin:0 0 26px}
+.sayline em{font-family:var(--serif);font-style:italic;font-weight:400;font-size:1.08em}
+.sayline.coral{color:var(--coral)}.sayline.teal{color:var(--teal)}.sayline.amber{color:var(--amber)}
+.sayline .big{font-family:var(--mono);font-weight:500;font-size:78px;letter-spacing:-.03em;display:block}
+
+/* 7 offline */
+#off-card{position:absolute;left:300px;top:250px;width:900px;background:var(--card);border:1px solid var(--rule);border-left:5px solid var(--amber);border-radius:8px;padding:36px 40px;box-shadow:0 30px 70px -40px rgba(29,23,38,.5)}
+#off-card .k{font:500 18px var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);display:flex;justify-content:space-between}
+#off-card .k b{color:var(--amber);font-weight:500;font-size:26px}
+#off-card h3{font:600 40px/1.2 var(--sans);color:var(--ink);margin:16px 0 22px}
+#off-btn{display:inline-block;border:1px solid var(--rule);padding:14px 22px;font:500 22px var(--sans);color:var(--ink);background:#fff}
+#off-exp{margin-top:22px;background:var(--paper);border:1px solid var(--rule);border-radius:6px;padding:22px 24px}
+#off-exp p{font:400 27px/1.5 var(--sans);color:var(--ink-2);margin:16px 0 0;min-height:200px}
+#status{position:absolute;right:70px;top:60px;display:flex;gap:18px;align-items:center;background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:16px 22px;font:500 22px var(--sans);color:var(--ink)}
+#off-side{position:absolute;left:1300px;top:300px;width:520px}
+#off-cursor{position:absolute;width:34px}
+#illu{position:absolute;left:300px;top:200px;font:500 15px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-4)}
+
+/* 8 stack */
+#stack-h{position:absolute;left:0;right:0;top:120px;text-align:center}
+#stack-h .display{font-size:96px}
+#modes{position:absolute;left:0;right:0;top:330px;display:flex;justify-content:center;gap:22px}
+#modes span{font:500 26px var(--mono);padding:12px 20px;border-radius:8px}
+#cards{position:absolute;left:150px;right:150px;top:470px;display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+#cards div{background:var(--card);border:1px solid var(--rule);border-radius:8px;padding:28px 30px;box-shadow:0 20px 50px -34px rgba(29,23,38,.45);border-top:4px solid var(--ink)}
+#cards b{display:block;font:600 34px var(--sans);color:var(--ink)}
+#cards span{display:block;margin-top:10px;font:400 24px var(--sans);color:var(--ink-3)}
+
+/* 9 end */
+#end-wrap{position:absolute;inset:0;display:grid;place-items:center;text-align:center}
+#end-wrap .tag{font-size:84px;margin-top:40px}
+#end-meta{margin-top:56px;font:500 26px/1.8 var(--mono);color:var(--ink-2)}
+#end-foot{position:absolute;left:0;right:0;bottom:56px;text-align:center;font:500 17px var(--mono);letter-spacing:.06em;color:var(--ink-4)}
+</style>
+</head>
+<body>
+
+<!-- 1 · BILL -->
+<section class="scene night" id="s-bill">
+  <img id="bill-img" src="../web/public/samples/er-wrist.jpg" alt="">
+  <svg id="bill-ring" width="1920" height="1080"><ellipse id="ring" cx="0" cy="0" rx="150" ry="52" fill="none" stroke="#F26B6F" stroke-width="6" stroke-linecap="round"/></svg>
+  <div id="bill-amt">$1,284.00</div>
+  <div id="bill-sub">for a <em>sprained wrist.</em></div>
+</section>
+
+<!-- 2 · STATS -->
+<section class="scene night" id="s-stats">
+  <div class="eyebrow abs" style="left:180px;top:200px">┤ What a wrong bill costs ├</div>
+  <div class="stat" id="st1" style="left:180px"><div class="n" style="color:#F26B6F">43%</div><p>of US adults have had a medical bill they believed was wrong</p><div class="src">KFF Health Care Debt Survey</div></div>
+  <div class="stat" id="st2" style="left:740px"><div class="n">&lt; ½</div><p>of insured adults with a surprise bill ever challenge it</p><div class="src">Commonwealth Fund, 2024</div></div>
+  <div class="stat" id="st3" style="left:1300px"><div class="n" style="color:#3DB5AF">38%</div><p>of people who dispute get it reduced or cancelled</p><div class="src">Commonwealth Fund, 2024</div></div>
+</section>
+
+<!-- 3 · TRAP -->
+<section class="scene night" id="s-trap">
+  <div id="chat">
+    <div class="hd">Ask anything</div>
+    <pre id="chat-text"></pre>
+    <div class="send"><span>Send ↑</span></div>
+  </div>
+  <div id="trap-tags"><div id="tg1">NAME</div><div id="tg2">BIRTHDAY</div><div id="tg3">INSURANCE ID</div><div id="tg4">DIAGNOSIS</div></div>
+  <div id="trap-out">→ all of it, to <em>someone else’s server.</em></div>
+</section>
+
+<!-- 4 · TITLE -->
+<section class="scene night" id="s-title">
+  <div id="wipe"></div>
+  <div id="title-wrap"><div>
+    <svg id="mark" width="190" height="190" viewBox="0 0 120 120" style="display:block;margin:0 auto 46px">
+      <rect id="m-tile" width="120" height="120" rx="26.4" fill="#1D1726"/>
+      <path id="m-solid" d="M55.5 31.2 A28.8 28.8 0 0 0 55.5 88.8 Z" fill="#E5484D"/>
+      <path id="m-dash" d="M64.5 34.8 A25.2 25.2 0 0 1 64.5 85.2" fill="none" stroke="#F5F3EF" stroke-width="7.2" stroke-dasharray="8.4 5.4"/>
+      <rect id="m-wall" x="55.5" y="20.4" width="9" height="79.2" rx="4.5" fill="#F5F3EF"/>
+    </svg>
+    <h1 class="display" id="t-word">AIRLOCK</h1>
+    <div class="display tag" id="t-tag">Fight the bill, <span class="accent">not your privacy</span></div>
+  </div></div>
+</section>
+
+<!-- 5 · WALL -->
+<section class="scene paper" id="s-wall">
+  <div id="wall-cap"><div class="eyebrow">┤ How it works ├</div><h2 class="display" style="margin-top:20px" id="wall-h">One SDK.<br><span class="accent">A wall</span> in the middle.</h2></div>
+  <svg id="iso" width="1920" height="1080"></svg>
+  <div id="labels"></div>
+</section>
+
+<!-- 6 · APP -->
+<section class="scene paper" id="s-app">
+  <div id="win"><div class="bar"><i></i><i></i><i></i><div class="url">airlock-hybrid.web.app/#/app</div></div><img id="appimg" alt=""></div>
+  <div id="app-note">Sample run · scripted model outputs · the real app, recorded</div>
+  <div id="say"></div>
+</section>
+
+<!-- 7 · OFFLINE -->
+<section class="scene paper" id="s-offline">
+  <div id="illu">Illustration</div>
+  <div id="status"><svg id="wifi" width="34" height="28" viewBox="0 0 34 28"><path d="M2 9a22 22 0 0 1 30 0M7 15a15 15 0 0 1 20 0M12 21a8 8 0 0 1 10 0" fill="none" stroke="#1D1726" stroke-width="3" stroke-linecap="round"/><circle cx="17" cy="25" r="2.4" fill="#1D1726"/><line id="wifi-x" x1="4" y1="2" x2="30" y2="27" stroke="#E5484D" stroke-width="3.4" stroke-linecap="round"/></svg><span id="net">Wi-Fi</span></div>
+  <div id="off-card">
+    <div class="k"><span>Duplicate · lines 2, 3</span><b>−$212.00</b></div>
+    <h3>Same wrist X-ray billed twice</h3>
+    <span id="off-btn">Explain in plain words</span>
+    <div id="off-exp"><span class="badge b-dev" id="off-badge">On device · Gemini Nano</span><p id="off-text"></p></div>
+  </div>
+  <svg id="off-cursor" viewBox="0 0 24 24"><path d="M4 2l15 9-6.5 1.6L9.6 19z" fill="#1D1726" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg>
+  <div id="off-side"><div class="eyebrow" style="margin-bottom:24px">┤ Explain ├</div>
+    <div class="sayline" id="os1"><span class="mono" style="font-size:34px;font-weight:500;letter-spacing:0">PREFER_ON_DEVICE</span></div>
+    <div class="sayline" id="os2">No identity in, <em>so a cloud fallback is safe.</em></div>
+  </div>
+</section>
+
+<!-- 8 · STACK -->
+<section class="scene paper" id="s-stack">
+  <div id="stack-h"><h2 class="display">One SDK. <span class="accent">Three modes.</span></h2></div>
+  <div id="modes"><span class="b-dev" style="background:var(--coral-wash);color:var(--coral)">ONLY_ON_DEVICE</span><span style="background:var(--teal-wash);color:var(--teal)">ONLY_IN_CLOUD</span><span style="background:#ECE8F8;color:var(--violet)">PREFER_ON_DEVICE</span></div>
+  <div id="cards">
+    <div style="border-top-color:var(--coral)"><b>Firebase AI Logic</b><span>Gemini Nano + Gemini, one SDK</span></div>
+    <div><b>App Check</b><span>reCAPTCHA Enterprise</span></div>
+    <div><b>Authentication</b><span>anonymous sign-in</span></div>
+    <div><b>Remote Config</b><span>model and privacy policy</span></div>
+    <div><b>Firestore</b><span>anonymous outcome counters</span></div>
+    <div style="border-top-color:var(--teal)"><b>Hosting</b><span>strict Content Security Policy</span></div>
+  </div>
+</section>
+
+<!-- 9 · END -->
+<section class="scene paper" id="s-end">
+  <div id="end-wrap"><div>
+    <img src="../brand/airlock-logo.svg" style="height:120px;margin:0 auto" alt="Airlock">
+    <div class="display tag">Fight the bill, <span class="accent">not your privacy</span></div>
+    <div id="end-meta">airlock-hybrid.web.app<br>github.com/Ankur17nith/airlock</div>
+  </div></div>
+  <div id="end-foot">Open source · Apache-2.0 · Built with Firebase AI Logic for #BuildHybridAI 2026 · Music: Sascha Ende, ende.app (CC BY 4.0) · Sample patient is fictional</div>
+</section>
+
+<script>
+const $ = (s) => document.querySelector(s)
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x))
+const easeOut = (x) => 1 - Math.pow(1 - clamp(x), 3)
+const easeIO = (x) => { x = clamp(x); return x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2 }
+const p = (t, a, d) => easeOut((t - a) / d)          // eased progress of an entrance starting at a, lasting d
+const pIO = (t, a, d) => easeIO((t - a) / d)
+const rise = (el, k, dy = 24) => { el.style.opacity = k; el.style.transform = `translateY(${(1 - k) * dy}px)` }
+const SCENES = window.TIMELINE.scenes
+let FRAMES = window.APP_FRAMES || []
+
+/* ── 1 BILL ───────────────────────────────── */
+function bill(t) {
+  const img = $('#bill-img')
+  const k = p(t, 0, 1.3), z = pIO(t, 2.0, 1.6)
+  img.style.opacity = k
+  img.style.transform = `translateY(${(1 - k) * 160}px) rotate(${-4 + z * 2}deg) scale(${1 + z * .08})`
+  // the "Amount due" total sits at (1195, 1185) of the 1360×1397 image
+  const r = img.getBoundingClientRect(), sx = 820 / 1360
+  const cx = 250 + 1180 * sx, cy = 150 + 1212 * sx
+  const ring = $('#ring'), len = 2 * Math.PI * 150
+  ring.setAttribute('cx', cx); ring.setAttribute('cy', cy)
+  ring.setAttribute('transform', `rotate(${-4 + z * 2} ${250 + 410} ${150 + 1397 * sx / 2}) translate(${0} ${(1 - k) * 160})`)
+  ring.style.strokeDasharray = len; ring.style.strokeDashoffset = len * (1 - p(t, 2.2, 1.0))
+  rise($('#bill-amt'), p(t, 1.7, .6), 30)
+  rise($('#bill-sub'), p(t, 3.9, .6), 20)
+  const out = clamp((t - 6.4) / .6); $('#s-bill').style.opacity = 1 - out
+}
+
+/* ── 2 STATS ──────────────────────────────── */
+function count(el, to, k, fmt) { el.textContent = fmt(Math.round(to * k)) }
+function stats(t, T) {
+  const A = 7.6
+  const c1 = p(T, A, 1.0), c2 = p(T, A + 4.3, .7), c3 = p(T, A + 8.0, .8)
+  rise($('#st1'), p(T, A - .3, .5)); count($('#st1 .n'), 43, c1, (n) => n + '%')
+  rise($('#st2'), p(T, A + 4.1, .5))
+  rise($('#st3'), p(T, A + 7.8, .5)); count($('#st3 .n'), 38, c3, (n) => n + '%')
+  const out = clamp((T - 20.4) / .6); $('#s-stats').style.opacity = 1 - out
+}
+
+/* ── 3 TRAP ───────────────────────────────── */
+const CHAT = [
+  ['Can you check my hospital bill for errors?\n\n', null],
+  ['Patient: ', null], ['Maya R. Ellison', 1], ['\nDOB: ', null], ['04/17/1991', 2], ['\nMember ID: ', null], ['XGH884120937', 3],
+  ['\nDx: ', null], ['S63.501A Sprain of right wrist', 4], ['\n99285  ED visit, level 5   1,890.00\n73110  X-ray wrist          212.00\n73110  X-ray wrist          212.00', null],
+]
+const HL = { 1: 21.8 + 4.0, 2: 21.8 + 4.7, 3: 21.8 + 5.5, 4: 21.8 + 7.0 }
+function trap(T) {
+  const total = CHAT.reduce((a, [s]) => a + s.length, 0)
+  const typed = Math.floor(total * clamp((T - 21.2) / 2.4))
+  let n = 0, html = ''
+  for (const [s, h] of CHAT) {
+    const part = s.slice(0, Math.max(0, typed - n)); n += s.length
+    if (!part) break
+    const on = h && T >= HL[h]
+    const esc = part.replace(/&/g, '&amp;').replace(/</g, '&lt;')
+    html += h ? `<span class="hl" style="background:${on ? 'rgba(242,107,111,.28)' : 'transparent'};color:${on ? '#FFB3B5' : 'inherit'};outline:${on ? '2px solid #F26B6F' : 'none'}">${esc}</span>` : esc
+  }
+  $('#chat-text').innerHTML = html
+  rise($('#chat'), p(T, 21.0, .6), 30)
+  for (const i of [1, 2, 3, 4]) { const el = $('#tg' + i); const k = p(T, HL[i], .35); el.style.opacity = k; el.style.transform = `translateX(${(1 - k) * -30}px)` }
+  rise($('#trap-out'), p(T, 30.2, .5))
+}
+
+/* ── 4 TITLE ──────────────────────────────── */
+function title(T) {
+  const w = pIO(T, 32.0, 1.1)
+  $('#wipe').style.width = `${w * 1920}px`
+  const k = p(T, 32.9, .6)
+  $('#mark').style.opacity = k
+  $('#m-solid').style.transform = `translateX(${(1 - p(T, 33.1, .7)) * -40}px)`
+  $('#m-dash').style.opacity = p(T, 33.5, .5)
+  $('#m-wall').style.transform = `scaleY(${p(T, 32.9, .5)})`; $('#m-wall').style.transformOrigin = '60px 60px'
+  rise($('#t-word'), p(T, 33.5, .6), 30)
+  rise($('#t-tag'), p(T, 34.6, .7), 24)
+  $('#title-wrap').style.opacity = 1 - clamp((T - 37.9) / .5)
+}
+
+/* ── 5 WALL (isometric) ───────────────────── */
+const S = 60, OX = 900, OY = 300
+const C30 = Math.cos(Math.PI / 6), S30 = .5
+const iso = (x, y, z) => [OX + (x - y) * C30 * S, OY + (x + y) * S30 * S - z * S]
+const pts = (a) => a.map(([x, y, z]) => iso(x, y, z).map((v) => v.toFixed(1)).join(',')).join(' ')
+function box(x, y, z, w, d, h, top, left, right, op = 1, stroke = 'none') {
+  const T = [[x, y, z + h], [x + w, y, z + h], [x + w, y + d, z + h], [x, y + d, z + h]]
+  const L = [[x, y + d, z], [x + w, y + d, z], [x + w, y + d, z + h], [x, y + d, z + h]]
+  const R = [[x + w, y, z], [x + w, y + d, z], [x + w, y + d, z + h], [x + w, y, z + h]]
+  return `<g opacity="${op}"><polygon points="${pts(L)}" fill="${left}" stroke="${stroke}"/><polygon points="${pts(R)}" fill="${right}" stroke="${stroke}"/><polygon points="${pts(T)}" fill="${top}" stroke="${stroke}"/></g>`
+}
+const CUBES = [
+  { id: 'nano', x: 1.0, y: 1.0, side: 'd', name: 'Gemini Nano', tag: 'ONLY_ON_DEVICE', at: 38.8 + 3.7 },
+  { id: 'vault', x: 1.0, y: 4.2, side: 'd', name: 'Vault', tag: 'AES-GCM · this laptop', at: 38.8 + 11.4 },
+  { id: 'guard', x: 4.1, y: 2.6, side: 'n', name: 'Guard', tag: 'code, not a prompt', at: 38.8 + 13.3 },
+  { id: 'gemini', x: 9.3, y: 0.6, side: 'c', name: 'Gemini', tag: 'ONLY_IN_CLOUD', at: 38.8 + 16.1 },
+  { id: 'search', x: 13.0, y: 0.6, side: 'c', name: 'Google Search', tag: 'grounding', at: 38.8 + 19.4 },
+  { id: 'fs', x: 11.2, y: 4.6, side: 'c', name: 'Firestore', tag: 'outcome counters', at: 38.8 + 18.6 },
+]
+const COL = { d: ['#F7D3D1', '#E89A9B', '#D77B7D'], c: ['#CDEAE7', '#7FC4BF', '#5AA9A4'], n: ['#E9E5F1', '#B8B0C6', '#9C93AC'] }
+function wall(T) {
+  let svg = ''
+  // platforms
+  svg += box(0, 0, -0.35, 7, 7, .35, '#FBE9E7', '#EBC9C6', '#E0B5B2', p(T, 38.6, .7))
+  svg += box(8.6, 0, -0.35, 7, 7, .35, '#E3F2F0', '#BFDCD9', '#AACFCB', p(T, 38.9, .7))
+  // the wall
+  const wh = 3.2 * p(T, 38.8 + 1.5, .8)
+  svg += box(7.55, -0.4, 0, .5, 7.8, wh, '#3A3346', '#1D1726', '#2B2535', 1)
+  // cubes
+  for (const c of CUBES) {
+    const k = p(T, c.at - .2, .5)
+    const [t, l, r] = COL[c.side]
+    svg += box(c.x, c.y, (1 - k) * 2.2, 1.7, 1.7, 1.3, t, l, r, k)
+  }
+  // packets: line items cross the wall (VO "Only anonymous line items cross" at +13.3..+15.6)
+  const A = 38.8 + 13.9
+  for (let i = 0; i < 4; i++) {
+    const q = clamp((T - A - i * .35) / 1.6)
+    if (q <= 0 || q >= 1) continue
+    const e = easeIO(q), x = 5.9 + (9.3 - 5.9) * e, y = 3.0 - 1.3 * e + i * .22, z = .55 + Math.sin(Math.PI * e) * 1.6
+    svg += box(x, y, z, .42, .42, .42, '#9ED8D3', '#21918C', '#1A7773', 1)
+  }
+  // identity cube: tries to leave and is stopped by the wall
+  const B = 38.8 + 10.8
+  const q = clamp((T - B) / 2.4)
+  if (q > 0) {
+    const go = q < .5 ? easeOut(q / .5) : 1 - easeIO((q - .5) / .5) * .75
+    const x = 2.7 + (7.0 - 2.7) * go
+    svg += box(x, 4.6, .5, .55, .55, .55, '#F5A8AA', '#E5484D', '#C93C41', 1)
+    if (q > .45 && q < .75) { const [sx, sy] = iso(7.5, 4.9, 1.2); svg += `<circle cx="${sx}" cy="${sy}" r="${16 + (q - .45) * 120}" fill="none" stroke="#E5484D" stroke-width="3" opacity="${1 - (q - .45) / .3}"/>` }
+  }
+  $('#iso').innerHTML = svg
+  // labels
+  let html = ''
+  for (const c of CUBES) {
+    const k = p(T, c.at, .45)
+    const [lx, ly] = iso(c.x + .85, c.y + .85, 1.3)
+    html += `<div class="lbl" style="left:${lx}px;top:${ly - 18 - (1 - k) * 10}px;opacity:${k}"><b>${c.name}</b><span class="${c.side}">${c.tag}</span></div>`
+  }
+  const [dx, dy] = iso(3.5, 7.6, 0), [cx, cy] = iso(12.1, 7.6, 0)
+  html += `<div id="side-dev" style="left:${dx - 120}px;top:${dy + 10}px;opacity:${p(T, 38.8 + 2.8, .5)}">┤ YOUR LAPTOP ├</div>`
+  html += `<div id="side-cloud" style="left:${cx - 70}px;top:${cy + 10}px;opacity:${p(T, 38.8 + 16.1, .5)}">┤ CLOUD ├</div>`
+  $('#labels').innerHTML = html
+  rise($('#wall-cap'), p(T, 38.6, .6))
+  $('#s-wall').style.opacity = 1 - clamp((T - 61.5) / .5)
+}
+
+/* ── 6 APP ────────────────────────────────── */
+const SAY = [
+  { from: 62.6, to: 81.6, eyebrow: '┤ 01 · Read + seal · on device ├', lines: [[63.6, 'Read <em>on this laptop.</em>'], [66.4, 'Each identifier becomes <em>a token.</em>', 'coral'], [71.0, 'Only codes and amounts <em>will cross.</em>', 'teal']] },
+  { from: 82.0, to: 96.8, eyebrow: '┤ 02 · The guard ├', lines: [[83.6, 'A guard in code, <em>not in a prompt.</em>'], [89.6, 'Hide an ID in line 7…'], [91.6, 'Blocked <em>before it left.</em>', 'coral']] },
+  { from: 97.2, to: 117.6, eyebrow: '┤ 03 · Audit · in the cloud ├', lines: [[101.2, '<span class="big">$212.00</span>billed twice.', 'amber'], [105.0, 'Level-5 ER code, <em>questioned.</em>'], [108.8, 'Every finding <em>cites its rule.</em>', 'teal']] },
+  { from: 118.0, to: 134.0, eyebrow: '┤ 04 · Write · on device ├', lines: [[119.0, 'Placeholders <em>in the cloud.</em>'], [123.0, 'Your details, <em>filled in here.</em>', 'coral'], [126.6, 'The letter <em>never leaves.</em>']] },
+]
+function app(T) {
+  const k = p(T, 62.0, .7)
+  $('#win').style.opacity = k; $('#win').style.transform = `translateY(${(1 - k) * 40}px)`
+  $('#app-note').style.opacity = k
+  // frame for this moment of the recording
+  const r = T - window.TIMELINE.appOffset
+  let lo = 0, hi = FRAMES.length - 1, idx = 0
+  while (lo <= hi) { const m = (lo + hi) >> 1; if (FRAMES[m].t <= r) { idx = m; lo = m + 1 } else hi = m - 1 }
+  const src = FRAMES.length ? 'work/app/' + FRAMES[idx].name : ''
+  const img = $('#appimg'); if (img.getAttribute('src') !== src) img.setAttribute('src', src)
+  // statements
+  const blk = SAY.find((b) => T >= b.from - .2 && T < b.to + .3)
+  let html = ''
+  if (blk) {
+    const fade = 1 - clamp((T - blk.to) / .3)
+    html += `<span class="eyebrow" style="opacity:${p(T, blk.from, .4) * fade}">${blk.eyebrow}</span>`
+    for (const [at, txt, cls] of blk.lines) {
+      const kk = p(T, at, .45) * fade
+      html += `<div class="sayline ${cls || ''}" style="opacity:${kk};transform:translateY(${(1 - kk) * 18}px)">${txt}</div>`
+    }
+  }
+  $('#say').innerHTML = html
+  $('#s-app').style.opacity = 1 - clamp((T - 133.6) / .4)
+}
+
+/* ── 7 OFFLINE ────────────────────────────── */
+const EXPLAIN = 'Your bill charges for the same wrist X-ray twice on the same day. Unless both wrists were X-rayed, or the first picture had to be redone, you should only pay for one. Ask the billing office to remove line 3.'
+function offline(T) {
+  rise($('#off-card'), p(T, 134.2, .6)); rise($('#status'), p(T, 134.3, .5), -20)
+  const x = p(T, 135.1, .4)
+  $('#wifi-x').style.opacity = x
+  $('#net').textContent = x > .5 ? 'Offline' : 'Wi-Fi'; $('#net').style.color = x > .5 ? '#E5484D' : '#1D1726'
+  // cursor to the button, click at 138.6
+  const cp = pIO(T, 137.2, 1.2), cx = 1500 + (580 - 1500) * cp, cy = 900 + (520 - 900) * cp
+  const cur = $('#off-cursor'); cur.style.left = cx + 'px'; cur.style.top = cy + 'px'; cur.style.opacity = p(T, 136.8, .3) * (1 - clamp((T - 141) / .4))
+  const pressed = T >= 138.6
+  $('#off-btn').style.background = pressed ? 'var(--coral-wash)' : '#fff'
+  const e = $('#off-exp'); e.style.opacity = p(T, 138.8, .3)
+  const words = EXPLAIN.split(' '), n = Math.floor(words.length * clamp((T - 139.4) / 5.2))
+  $('#off-text').textContent = words.slice(0, n).join(' ')
+  $('#off-badge').style.opacity = p(T, 139.0, .3)
+  rise($('#os1'), p(T, 139.8, .45)); rise($('#os2'), p(T, 141.6, .5))
+  rise($('#off-side .eyebrow'), p(T, 139.6, .4))
+  $('#illu').style.opacity = p(T, 134.5, .4)
+  $('#s-offline').style.opacity = 1 - clamp((T - 149.6) / .4)
+}
+
+/* ── 8 STACK ──────────────────────────────── */
+function stack(T) {
+  rise($('#stack-h'), p(T, 150.3, .6))
+  const ms = document.querySelectorAll('#modes span'); ms.forEach((m, i) => rise(m, p(T, 151.8 + i * .25, .4), 14))
+  const cs = document.querySelectorAll('#cards div'); cs.forEach((c, i) => rise(c, p(T, 152.8 + i * .16, .5), 24))
+  $('#s-stack').style.opacity = 1 - clamp((T - 158.0) / .4)
+}
+
+/* ── 9 END ────────────────────────────────── */
+function end(T) {
+  const w = document.querySelector('#end-wrap > div')
+  rise(w, p(T, 158.5, .7), 20)
+  $('#end-foot').style.opacity = p(T, 160.0, .6)
+}
+
+const RENDER = { bill: (T) => bill(T), stats, trap, title, wall, app, offline, stack, end }
+window.render = (T) => {
+  for (const s of SCENES) {
+    const el = document.getElementById('s-' + s.id)
+    const on = T >= s.from && T < s.to
+    el.style.display = on ? 'block' : 'none'
+    if (on) RENDER[s.id](T, T)
+  }
+  // the title scene begins over the trap scene's night background
+  if (T >= 32 && T < 38.4) document.getElementById('s-title').style.background = 'var(--night)'
+}
+window.ready = () => Promise.all([document.fonts.ready, ...[...document.images].map((i) => i.complete ? 1 : new Promise((r) => { i.onload = i.onerror = r }))])
+</script>
+</body>
+</html>
