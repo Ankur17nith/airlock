@@ -1,0 +1,22 @@
+rules_version = '2';
+// Airlock stores aggregate counters only: outcomes/{findingKind} = { disputed, won, lost }.
+// A signed-in (anonymous) user may add exactly 1 to exactly one counter per write.
+service cloud.firestore {
+  match /databases/{db}/documents {
+    match /outcomes/{kind} {
+      allow read: if true;
+      allow create, update: if request.auth != null
+        && kind in ['duplicate', 'unbundling', 'upcoding', 'surprise_billing', 'denial_appealable', 'pricing', 'math', 'question']
+        && request.resource.data.keys().hasOnly(['disputed', 'won', 'lost'])
+        && request.resource.data.diff(resource == null ? {} : resource.data).affectedKeys().size() == 1
+        && oneMore(request.resource.data, resource == null ? {} : resource.data);
+      allow delete: if false;
+    }
+    match /{document=**} { allow read, write: if false; }
+  }
+}
+function oneMore(next, prev) {
+  return (next.get('disputed', 0) - prev.get('disputed', 0))
+       + (next.get('won', 0) - prev.get('won', 0))
+       + (next.get('lost', 0) - prev.get('lost', 0)) == 1;
+}
