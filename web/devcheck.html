@@ -1,0 +1,20 @@
+<!doctype html><html><body><pre id="o">running…</pre>
+<!-- Dev-only live smoke test (not part of the production build, which only bundles index.html).
+     Run `npm run dev`, open /devcheck.html: seals the fictional sample bill, then runs a real
+     cloud audit and an explain call through App Check and the fetch-level guard. -->
+<script type="module">
+import { boot } from '/src/ai/firebase.ts'
+import { installFetchGuard } from '/src/ai/fetchGuard.ts'
+import { audit, explain } from '/src/ai/stages.ts'
+import { seal } from '/src/airlock/vault.ts'
+import { ER_WRIST } from '/src/samples/erWrist.ts'
+const o = document.getElementById('o')
+try {
+  const s = seal(ER_WRIST)
+  installFetchGuard(() => s.vault.identity)
+  await boot()
+  const r = await audit(s.sealed)
+  const e = await explain(r.data.findings[0])
+  o.textContent = 'OK ' + JSON.stringify({ source: r.source, ms: Math.round(r.ms), summary: r.data.summary, findings: r.data.findings.map(f => [f.kind, f.title, f.lines, f.amount, f.rule.name]), sources: r.data.sources.length, letterHasTokens: /⟦[A-Z_]+⟧/.test(r.data.letter), explainSource: e.source, explain: e.data.slice(0, 200) }, null, 1)
+} catch (err) { o.textContent = 'ERR ' + (err && err.message) }
+</script></body></html>
